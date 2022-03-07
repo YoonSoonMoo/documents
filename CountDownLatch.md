@@ -45,7 +45,8 @@ Java Concurrent package에서는 Multi thread를 효율적으로 제어하는 �
 
 
 다음은 CountDownLatch 을 사용해서 thread를 제어하는 sequence diagram 입니다.
-![image](https://user-images.githubusercontent.com/6250760/156977858-d51650e2-e888-46e6-9576-0ec5df8952bf.png)
+![image](https://user-images.githubusercontent.com/6250760/157005659-d6148347-e96e-4ce6-8b37-5b7b796696a0.png)
+
 
 > 위의 예제는 thread 3개가 모두 완료된 상태가 되어야 후속 처리를 진행하는 flow 를 설명합니다.
 > 각각의 thread에서는 처리가 완료 되었을 경우 count down 를 호출합니다.
