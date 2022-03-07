@@ -58,3 +58,74 @@ Java Concurrent package에서는 Multi thread를 효율적으로 제어하는 �
 
 #### 복수 thread 의 효율적 대기 처리 (예제)
 
+위의 sequence diagram 을 program으로 구현하면 아래와 같습니다.
+``CountDownLatch`` 객체를 각각의 thread에 넘겨줍니다.  
+마지막의 ``모든 처리가 완료 되어 표시...`` 는 모든 thread가 완료되면 출력이 됩니다.
+
+
+```java
+    private void runWorkers() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(5); // 최대 5개의 쓰레드 동시 실행
+        IntStream.range(0, 5)
+                .mapToObj(i -> new Worker(i, countDownLatch))
+                .map(Thread::new)
+                .forEach(Thread::start);
+
+        // 기다리는 처리
+        countDownLatch.await();
+
+        System.out.println("모든 처리가 완료 되어 표시...");
+    }
+
+```
+
+각 thread는 실행이 완료되면 전달받은 ``CountDownLatch``인스턴스의 ``countDown()`` method를 호출합니다.
+
+
+```java
+
+    public class Worker implements Runnable { //쓰레드
+        private CountDownLatch countDownLatch;
+        private int index;
+
+        public Worker(final int index, final CountDownLatch countDownLatch) {
+            this.index = index;
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                System.out.println("시작 thread --- " + index);
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("종료 thread --- " + index);
+                countDownLatch.countDown();
+            }
+        }
+    }
+
+```
+
+실행 결과는 아래와 같습니다.
+```javascript
+
+시작 thread --- 2
+시작 thread --- 3
+시작 thread --- 1
+시작 thread --- 4
+시작 thread --- 0
+종료 thread --- 2
+종료 thread --- 4
+종료 thread --- 0
+종료 thread --- 1
+종료 thread --- 3
+모든 처리가 완료 되어 표시...
+
+Process finished with exit code 0
+
+```
+
+thread 실행과 종료가 모두 제 각각이지만 가장 마지막에 실행되어야 하는 처리는 thread가 모두 종료된 이후 실행되는 것을 알수 있습니다.
