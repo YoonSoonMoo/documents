@@ -1,5 +1,5 @@
 # Multi process handling [ ConuntDownLatch ]
-![](https://img.shields.io/badge/Java-1.8 version-brightgreen) ![](https://img.shields.io/badge/ConuntDownLatch-java.util.concurrent-orange)
+![](https://img.shields.io/badge/Java-1.8%20version-brightgreen) ![](https://img.shields.io/badge/ConuntDownLatch-java.util.concurrent-orange)
 
   Java 에서 사용하는 Multi Process 개발 시 유용하게 사용할 수 있는 방법 ` [Java기준] `
 * 해당 Class 는 GNU General Public License version 2 정책에 따라 퍼블리싱 되었습니다.
