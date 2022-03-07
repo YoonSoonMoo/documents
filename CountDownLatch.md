@@ -34,3 +34,8 @@ try {
 System.out.println("Thread terminated.");
 
 ```
+
+다음은 CountDownLatch 을 사용해서 thread를 제어하는 sequence daiagram 입니다.
+![image](https://user-images.githubusercontent.com/6250760/156977858-d51650e2-e888-46e6-9576-0ec5df8952bf.png)
+
+
