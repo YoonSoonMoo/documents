@@ -29,13 +29,16 @@ public class StompChannelInterceptor implements ChannelInterceptor {
                 log.debug("Connected!!");
                 break;
             case SUBSCRIBE:
-                log.debug("subscript!!");
+                String subscribe = message.getHeaders().get("simpDestination").toString();
+                log.debug("subscribe : {} ",subscribe);
                 break;
             case DISCONNECT:
                 log.debug("disconnected !!");
                 break;
+            case SEND:
+                break;
             default:
-                log.warn("wrong command");
+                log.warn("wrong command : {}" , command);
         }
 
         return message;

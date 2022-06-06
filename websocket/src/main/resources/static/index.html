@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
 <html>
 <head>
   <title>Hello WebSocket</title>
@@ -23,11 +24,13 @@
         </div>
       </form>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
       <form class="form-inline">
         <div class="form-group">
-          <label for="name">What is your name?</label>
-          <input type="text" id="name" class="form-control" placeholder="Your name here...">
+          <label for="sender">What is your name?</label>
+          <input type="text" id="sender" class="form-control" placeholder="Your name here..."><br>
+          <label for="content">What do you want to say?</label>
+          <input type="text" id="content" class="form-control" placeholder="text here...">
         </div>
         <button id="send" class="btn btn-default" type="submit">Send</button>
       </form>
@@ -38,7 +41,7 @@
       <table id="conversation" class="table table-striped">
         <thead>
         <tr>
-          <th>Greetings</th>
+          <th>인사말</th>
         </tr>
         </thead>
         <tbody id="greetings">
