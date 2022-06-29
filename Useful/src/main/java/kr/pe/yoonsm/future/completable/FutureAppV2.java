@@ -11,48 +11,77 @@ public class FutureAppV2 {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
+        FutureAppV2 app = new FutureAppV2();
+        app.runProcess();
+
+    }
+
+
+    private void runProcess() throws ExecutionException, InterruptedException {
+
+        long start = System.currentTimeMillis();
+
         MyScore myScore = new MyScore();
         myScore.setId("yoon");
         // 스코어 베이스 role을 넘긴다.
-        CompletableFuture<MyScore> completableFuture = CompletableFuture.supplyAsync(new SpecialRole(myScore));
-        completableFuture.thenCompose(s -> CompletableFuture.supplyAsync(new DistanceRole(myScore)));
 
+        CompletableFuture<MyScore> completableFuture = CompletableFuture.supplyAsync(new SpecialRole(myScore))
+                .thenCompose(s -> CompletableFuture.supplyAsync(new DistanceRole(myScore)));
         completableFuture.get();
 
+        long end = System.currentTimeMillis();
+        System.out.println("time :" + (end - start));
     }
 
 
-    static class SpecialRole implements Supplier<MyScore>{
+    class SpecialRole implements Supplier<MyScore> {
 
         MyScore myScore;
-        public SpecialRole(MyScore myScore){
+
+        public SpecialRole(MyScore myScore) {
             this.myScore = myScore;
         }
 
         @Override
         public MyScore get() {
-            myScore.setScore(myScore.getScore()+10);
-            System.out.println("SpecialRole :"+myScore.getScore());
+            myScore.setScore(myScore.getScore() + 10);
+            System.out.println("SpecialRole :" + myScore.getScore());
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             return myScore;
         }
     }
 
 
-    static class DistanceRole implements Supplier<MyScore>{
+    class DistanceRole implements Supplier<MyScore> {
 
         MyScore myScore;
-        public DistanceRole(MyScore myScore){
+
+        public DistanceRole(MyScore myScore) {
             this.myScore = myScore;
         }
 
         @Override
         public MyScore get() {
-            myScore.setScore(myScore.getScore()+1);
-            System.out.println("DistanceRole : "+myScore.getScore());
+
+            myScore.setScore(myScore.getScore() + 1);
+            System.out.println("DistanceRole : " + myScore.getScore());
+
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
             return myScore;
         }
     }
-
 
 
     static class MyScore {
