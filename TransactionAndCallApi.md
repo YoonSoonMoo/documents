@@ -35,10 +35,10 @@ API 호출 이후의 처리를 transaction에서 분리하는 방법을 생각�
 물론 API 호출 전에 발생한 Exception 으로 인한 rollback은 문제가 없습니다.
 ```java
 @Transactional(rollbackFor=Exception.class)
-public void 출금처리(출금신청Vo){
+public void 출금처리(출금신청Vo withdraw){
     
-    Object pointData = db.getPointData(출금신청Vo.getUserId());
-    Object userData = db.getUserData(출금신청Vo.getUserId());
+    Object pointData = db.getPointData(withdraw.getUserId());
+    Object userData = db.getUserData(withdraw.getUserId());
     String result = "fail";
     출금신청APIVo apiVo = null;
 
@@ -66,10 +66,10 @@ transaction 에서 분리를 해야 하는 부분은 아래의 처리 입니다.
 
 ```java
 @Transactional(rollbackFor=Exception.class, noRollbackFor = NoRollBackException.class)
-public void 출금처리(출금신청Vo){
+public void 출금처리(출금신청Vo withdraw){
     
-    Object pointData = db.getPointData(출금신청Vo.getUserId());
-    Object userData = db.getUserData(출금신청Vo.getUserId());
+    Object pointData = db.getPointData(withdraw.getUserId());
+    Object userData = db.getUserData(withdraw.getUserId());
     String result = "fail";
     출금신청APIVo apiVo = null;
 
@@ -96,7 +96,7 @@ public void 출금처리(출금신청Vo){
 }
 ```
 
-NoRollBackException가 발생 했다는 것은 출금 이력이 DB에 반영이 되지 않았거나 노티가 고객에게 발송되지 않았다는  
+NoRollBackException 이 발생 했다는 것은 출금 이력이 DB에 반영이 되지 않았거나 노티가 고객에게 발송되지 않았다는  
 것을 의미합니다. 결국 완벽한 대응이라고는 말할 수는 없습니다.  
 발생된 Exception 의 내용에 따라 recovery 가능 한 케이스도 또는 그렇지 못한 케이스도 존재 합니다.  
 그래서 비슷한 내용으로 website 를 검색해 보면 명확한 답을 주지 않습니다.  
