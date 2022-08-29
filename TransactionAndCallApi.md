@@ -46,7 +46,7 @@ public void 출금처리(출금신청Vo){
         // 여기서 포인트 차감과 출금처리가 DB에 저장된다.
         if(db.포인트차감_출금처리(pointData,userData)){
             apiVo = makeData(pointData,userData);
-            result = http.send(출금신청APIVo);
+            result = http.send(apiVo);
         }
     }
     
@@ -77,7 +77,7 @@ public void 출금처리(출금신청Vo){
         // 여기서 포인트 차감과 출금처리가 DB에 저장된다.
         if(db.포인트차감_출금처리(pointData,userData)){
             apiVo = makeData(pointData,userData);
-            result = http.send(출금신청APIVo);
+            result = http.send(apiVo);
         }
     }
     
