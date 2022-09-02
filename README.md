@@ -3,3 +3,4 @@
 - websocket 추가 - 2022/05/01
 - completableFuture - 2022/05/30
 - transaction 의 고찰 - 2022/08/29
+- autocloseable resouce의 관리 - 2022/09/01
