@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserRepository {
 
-    private List<UserDao> userDb = new ArrayList<>();
+    private List<UserDao> userDb = new LinkedList<>();
 
     public UserDao findByUserId(String userId) {
         log.info("UserDB count : {}" , userDb.size());

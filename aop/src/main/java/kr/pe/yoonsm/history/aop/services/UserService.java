@@ -1,7 +1,6 @@
 package kr.pe.yoonsm.history.aop.services;
 
 import kr.pe.yoonsm.history.aop.Aspect.UserHistoryAnnotation;
-import kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation;
 import kr.pe.yoonsm.history.aop.repository.HistoryRepository;
 import kr.pe.yoonsm.history.aop.repository.UserRepository;
 import kr.pe.yoonsm.history.aop.repository.dao.HistoryDao;
@@ -24,18 +23,19 @@ public class UserService {
     final UserRepository userRepository;
 
     @UserHistoryAnnotation
-//    @TimerAnnotation
-    public void addUser(UserDao userDao) {
+    //  @TimerAnnotation -> point cut으로 설정
+    public boolean addUser(UserDao userDao) {
         userRepository.insertData(userDao);
         log.info("유저를 추가했습니다. : {}", userDao);
+        return true;
     }
+
     public UserDao getUserInfoByUserId(String userId) {
         return userRepository.findByUserId(userId);
     }
 
     @UserHistoryAnnotation
-//    @TimerAnnotation
-    public void editUser(UserDao userDao) {
+    public boolean editUser(UserDao userDao) {
         // 기존DB에 저장되어 있는 유저의 객체
         UserDao indbUser = userRepository.findByUserId(userDao.getUserId());
         if (indbUser != null) {
@@ -44,6 +44,7 @@ public class UserService {
             indbUser.setAddress2(userDao.getAddress2());
             indbUser.setAge(userDao.getAge());
         }
+        return true;
     }
 
     public List<HistoryDao> getAllHistory() {

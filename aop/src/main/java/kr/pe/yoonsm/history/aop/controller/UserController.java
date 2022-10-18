@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
-
 /**
  * Created by yoonsm@daou.co.kr on 2022-10-11
  */
@@ -28,7 +26,7 @@ public class UserController {
     }
 
     /**
-     * 유저를 등록 ( aop 로 유저 히스토리에 내역을 저장 )
+     * 유저를 등록 ( aop 로 유저 히스토리에 내역을 저장 : 신규등록 )
      *
      * @param userDao
      * @return
@@ -41,13 +39,12 @@ public class UserController {
             return "이미 있는 유저 입니다.";
         }
         userService.addUser(userDao);
-        log.info("유저가 추가되었습니다.");
-        return "유저가 추가되었습니다 " + userDao.toString();
+        return "유저가 추가되었습니다 " + userDao;
     }
 
 
     /**
-     * 유저 수정 ( aop 로 유저 히스토리에 내역을 저장 )
+     * 유저 수정 ( aop 로 유저 히스토리에 내역을 저장 : 수정된 내용)
      *
      * @param userDao
      * @return
@@ -65,11 +62,8 @@ public class UserController {
 
         StringBuilder returnValue = new StringBuilder();
         userService.getAllHistory().stream().forEach(data -> {
-             returnValue.append(data.toString());
+            returnValue.append(data.toString());
         });
-
         return returnValue.toString();
     }
-
-
 }
