@@ -66,12 +66,13 @@ public class HistoryAspect {
                     String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
+                        historyRepository.addHistory(historyDao);
                     }
                 } else {
                     historyDao.setChangeData(userDao.getUserId() + " 신규추가");
+                    historyRepository.addHistory(historyDao);
                 }
                 log.info("History Annotation Changed data : {}", historyDao.getChangeData());
-                historyRepository.addHistory(historyDao);
             }
         }
         return ret;

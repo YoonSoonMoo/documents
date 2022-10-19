@@ -130,8 +130,9 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
         // 커밋되기 전의 값을 미리 세팅 해야 한다. ( deep copy ) Memory repository 이기 때문에...
         //UserDao userDaoDb = userRepository.findByUserId(userDao.getUserId());
         if (userDao != null) {
-            userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
-            log.info("Parameter first Db values {}", userDaoDb);
+            userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(
+                    userRepository.findByUserId(userDao.getUserId())), UserDao.class);
+            log.info("Db values {}", userDaoDb);
         }
 
         // Main 처리  JoinPoint 기준 위 / 아래 양쪽에 구현되어 있다.
@@ -151,12 +152,13 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
                     String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
+                        historyRepository.addHistory(historyDao);
                     }
                 } else {
                     historyDao.setChangeData(userDao.getUserId() + " 신규추가");
+                    historyRepository.addHistory(historyDao);
                 }
                 log.info("History Annotation Changed data : {}", historyDao.getChangeData());
-                historyRepository.addHistory(historyDao);
             }
         }
         return ret;

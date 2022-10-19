@@ -52,6 +52,10 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/edituser", method = {RequestMethod.POST})
     public String editUser(@RequestBody UserDao userDao) {
+        if (userService.getUserInfoByUserId(userDao.getUserId()) == null) {
+            return "수정할 유저가 없습니다.";
+        }
+
         userService.editUser(userDao);
         return "유저를 수정했습니다.";
     }
