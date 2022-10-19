@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ *
  * Created by yoonsm@daou.co.kr on 2022-10-11
  */
 @Service
 @Slf4j
 @AllArgsConstructor
-public class UserService {
+public class UserService {   //---> AOP 의 대상이 되는 클래스를 target 이라 한다.
 
     final HistoryRepository historyRepository;
     final UserRepository userRepository;
@@ -35,7 +36,7 @@ public class UserService {
     }
 
     @UserHistoryAnnotation
-    public boolean editUser(UserDao userDao) {
+    public boolean editUser(UserDao userDao) { // --> JoinPoint Advice 대상이 되는 메소드
         // 기존DB에 저장되어 있는 유저의 객체
         UserDao indbUser = userRepository.findByUserId(userDao.getUserId());
         if (indbUser != null) {

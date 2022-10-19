@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
+ * --> 애스펙트(Aspect) 기본 모듈
  * Created by yoonsm@daou.co.kr on 2022-10-11
  */
 @Aspect
@@ -31,8 +32,9 @@ public class HistoryAspect {
     final CommonService commonService;
     final ObjectMapper objectMapper;
 
-    @Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.UserHistoryAnnotation)")
-    public Object addHistory(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+
+    @Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.UserHistoryAnnotation)") // --> 포인트컷(PointCut) 애노테이션 지정
+    public Object addHistory(ProceedingJoinPoint proceedingJoinPoint) throws Throwable { // --> 어드바이스(Advice)
 
         // Request 에서 전달받은 원본값
         UserDao userDao = (UserDao) Arrays.stream(proceedingJoinPoint.getArgs())
@@ -47,7 +49,7 @@ public class HistoryAspect {
             log.info("Parameter first Db values {}", userDaoDb);
         }
 
-        // Main 처리
+        // Main 처리  JoinPoint 기준 위 / 아래 양쪽에 구현되어 있다.
         Object ret = proceedingJoinPoint.proceed();
 
         log.info("main process complete!!");
@@ -79,7 +81,7 @@ public class HistoryAspect {
     }
 
     //@Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
-    @Around("within(kr.pe.yoonsm.history.aop.services.*)")
+    @Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
     public Object addTimer(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long before = System.currentTimeMillis();
         Object ret = proceedingJoinPoint.proceed();
