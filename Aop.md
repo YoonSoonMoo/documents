@@ -62,16 +62,16 @@ DI를 통해 타겟 대신 클라이언트에게 주입되며, 클라이언트�
 유저를 생성하고 수정할 경우 일반적으로 이력을 남기게 됩니다.  
 유저를 생성/수정하는 것이 메인 태스크로 이력 처리 트랜잭션을 별도로 분리합니다.    
 최초 유저 생성 타이밍에도 이력을 ( 신규등록 )  생성된 시간 포함해서 기록 합니다.  
-유저 정보를 수정했을 경우 수정한 내용에 대해서는 before , after 값을 기록 합니다.  
-target 은 service class 로 하며 Join Point는 유저생성과 유저 수정을 대상으로 지정합니다.    
-PointCut은 Annotaion 기반으로 작성하여 대상 method 추가/삭제의 편의성을 고려 했습니다.  
+유저 정보를 수정했을 경우 해당 내용 before , after 값을 기록 합니다.  
+Target 은 Service Class 로 하며 JoinPoint는 유저 생성과 유저 수정을 대상으로 지정 합니다.    
+PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 편의성을 고려 했습니다.  
 
-- Sequence diagram
+- Sequence Diagram
 
 [![](https://mermaid.ink/img/pako:eNqFk0Fr2zAUx7-K0CkF10R2Yic-lKR0h-2y0u00cnEtJRHEUibLY1kI5L7LoBQ2aEp26Nihh64NdId9otj7DpMcu3WcwA4G673fk_7_p6cpDDgm0IMReR8TFpAT6g-EH_YYAH4sOYvDcyKyVSC5AOvVPPlxm15_0aGxLyQN6NhnEgScScFHow1czkREfKABqYa7r0-roVihZ2TMI6qOmlSzQxrp8DbwpAccHh2VRAAPpFfLdDlPLn4l3xcaLSU1m8vS4Ofl-vEq58FzgSCBBGJw7tcs5BhWo25YtmUA0z3QWaW_so-W38UY1DpdwWOGt7Btb4o-0w2PpKkTL7FGK8ihLtPlHjg5LtSly8vkYQXSx5_JRSaScUmAoIOhBLyf451j0uci6zhhuGLFtg0L_c_KWPCAEEzZ4BWn7FR90sxjtQOgawp2r7etVqb3X9UV7Rezp6_ljTd21vd364c_4O-3y3Txu6x3dyT02dlxeY0UMQEGSBerZHmjmjdPr292u7ajv9Pty80g77bmLQ3VNTO1gy8pZ6CTdSeIZclh2cPWTBYjspG3Zyqf57lwkrPQgOrc0KdYPdapruxBOSQh6UFP_WLS9-OR7MEemyk0HmNfkhdYG4Je3x9FxID6Pb-ZsAB6ui0FlD_4J0q9tXechwWkltCbwo_QayHTtdpuy2k7VqveVFcGJ9Cz7JaJmnWEkIPqDkL2zICfsvq66bYbtuUgy2m6zYY7-wc8qKmt?type=png)](https://mermaid.live/edit#pako:eNqFk0Fr2zAUx7-K0CkF10R2Yic-lKR0h-2y0u00cnEtJRHEUibLY1kI5L7LoBQ2aEp26Nihh64NdId9otj7DpMcu3WcwA4G673fk_7_p6cpDDgm0IMReR8TFpAT6g-EH_YYAH4sOYvDcyKyVSC5AOvVPPlxm15_0aGxLyQN6NhnEgScScFHow1czkREfKABqYa7r0-roVihZ2TMI6qOmlSzQxrp8DbwpAccHh2VRAAPpFfLdDlPLn4l3xcaLSU1m8vS4Ofl-vEq58FzgSCBBGJw7tcs5BhWo25YtmUA0z3QWaW_so-W38UY1DpdwWOGt7Btb4o-0w2PpKkTL7FGK8ihLtPlHjg5LtSly8vkYQXSx5_JRSaScUmAoIOhBLyf451j0uci6zhhuGLFtg0L_c_KWPCAEEzZ4BWn7FR90sxjtQOgawp2r7etVqb3X9UV7Rezp6_ljTd21vd364c_4O-3y3Txu6x3dyT02dlxeY0UMQEGSBerZHmjmjdPr292u7ajv9Pty80g77bmLQ3VNTO1gy8pZ6CTdSeIZclh2cPWTBYjspG3Zyqf57lwkrPQgOrc0KdYPdapruxBOSQh6UFP_WLS9-OR7MEemyk0HmNfkhdYG4Je3x9FxID6Pb-ZsAB6ui0FlD_4J0q9tXechwWkltCbwo_QayHTtdpuy2k7VqveVFcGJ9Cz7JaJmnWEkIPqDkL2zICfsvq66bYbtuUgy2m6zYY7-wc8qKmt)
 
 #### 이렇게 구현을 해 봅니다.
-급조한 내용으로 Advice 포인트?가 많이 있을 수 있겠지만 이력관리에 대해 AOP를 어떤 방향으로 구현했는지를 확인해 주세요. 
+코드는 급조한 내용으로 억지스러운 부분이 있습니다만 이력관리에 대해 AOP를 어떤 방향으로 구현했는지를 확인해 주세요. 
 
 - 주요 로직
 > Controller : 유저 정보를 추가 한다.
