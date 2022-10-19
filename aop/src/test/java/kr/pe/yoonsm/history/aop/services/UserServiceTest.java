@@ -43,13 +43,21 @@ class UserServiceTest {
         userService.addUser(createUserDao());
         // 수정
         UserDao newUserDaou = createUserDao();
-        newUserDaou.setUserName("윤나래");
 
+        // 이름을 변경
+        newUserDaou.setUserName("윤유림");
         assertEquals(userService.editUser(newUserDaou),true);
-        assertEquals(userService.getAllHistory().get(1).getChangeData() ,  "userName changed 윤순무->윤나래 ");
+        assertEquals(userService.getAllHistory().get(1).getChangeData() ,  "userName changed 윤순무->윤유림 ");
 
-        newUserDaou.setAge(52);
+        // 나이를 변경
+        newUserDaou.setAge(18);
         assertEquals(userService.editUser(newUserDaou),true);
-        assertEquals(userService.getAllHistory().get(2).getChangeData() ,  "age changed 48->52 ");
+        assertEquals(userService.getAllHistory().get(2).getChangeData() ,  "age changed 48->18 ");
+
+        // 주소1 , 주소2 를 변경
+        newUserDaou.setAddress1("군포시");
+        newUserDaou.setAddress2("오금로");
+        assertEquals(userService.editUser(newUserDaou),true);
+        assertEquals(userService.getAllHistory().get(3).getChangeData() ,  "address1 changed 강동구->군포시 address2 changed 둔촌2동 98->오금로 ");
     }
 }

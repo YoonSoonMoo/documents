@@ -44,7 +44,7 @@ public class HistoryAspect {
 
         // 커밋되기 전의 값을 미리 세팅 해야 한다. ( deep copy ) Memory repository 이기 때문에...
         //UserDao userDaoDb = userRepository.findByUserId(userDao.getUserId());
-        if(userDao != null) {
+        if (userDao != null) {
             userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
             log.info("Parameter first Db values {}", userDaoDb);
         }
@@ -58,25 +58,22 @@ public class HistoryAspect {
         if (ret instanceof Boolean && userDao != null) {
             if (userDao != null && ((Boolean) ret).booleanValue()) {
                 HistoryDao historyDao = new HistoryDao();
+                historyDao.setSeq(historyRepository.getAllData().size());
+                historyDao.setLocalDateTime(LocalDateTime.now());
                 log.info("Parameter values {}", userDao);
+                // DB에 데이타가 존재하므로 update 처리
                 if (userDaoDb != null) {
                     String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
                     if (changedString.length() > 0) {
-                        historyDao.setSeq(historyRepository.getAllData().size());
                         historyDao.setChangeData(changedString);
-                        historyDao.setLocalDateTime(LocalDateTime.now());
-                        historyRepository.addHistory(historyDao);
-                        log.info("History Annotation : {}", changedString);
                     }
                 } else {
-                    historyDao.setSeq(historyRepository.getAllData().size());
                     historyDao.setChangeData(userDao.getUserId() + " 신규추가");
-                    historyDao.setLocalDateTime(LocalDateTime.now());
-                    historyRepository.addHistory(historyDao);
                 }
+                log.info("History Annotation Changed data : {}", historyDao.getChangeData());
+                historyRepository.addHistory(historyDao);
             }
         }
-
         return ret;
     }
 

@@ -27,7 +27,7 @@ public class UserService {   //---> AOP 의 대상이 되는 클래스를 target
     //  @TimerAnnotation -> point cut으로 설정
     public boolean addUser(UserDao userDao) {
         userRepository.insertData(userDao);
-        log.info("유저를 추가했습니다. : {}", userDao);
+        log.info("유저를 추가했습니다. | UserService.addUser : {}", userDao);
         return true;
     }
 
@@ -45,6 +45,7 @@ public class UserService {   //---> AOP 의 대상이 되는 클래스를 target
             indbUser.setAddress2(userDao.getAddress2());
             indbUser.setAge(userDao.getAge());
         }
+        log.info("유저를 수정했습니다. | UserService.editUser : {}", indbUser);
         return true;
     }
 
