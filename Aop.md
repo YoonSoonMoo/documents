@@ -1,13 +1,12 @@
-# Objects compare each other by aop
+# Aspect Oriented Programming
 ![](https://img.shields.io/badge/Java-1.8%20version-brightgreen) ![](https://img.shields.io/badge/Spring-AOP-orange)
 
 #### 이력 관리
-서비스의 주요 업무 변경은 이력을 남겨야 합니다.
-예를 들어 유저 등록/수정의 변경사항 , 주문변경 사항 , 처리내역(로그성) 저장 등 
-대다수의 서비스에 HISTORY 라는 키워드가 데이타베이스에 존재하는 이유 입니다.  
-얼마전 담당하고 있는 서비스에서 외부 연동 후 그 이력을 저장하다 에러가 발생하여 모든 처리가 Rollback 되는 사고가 발생했습니다.  
-연동처에서는 정상 처리되었으나 내부 DB는 원복되어 장애가 발생한 적이 있습니다.  
-이번 일을 계기로 서비스 이력 관리에 개인적으로 규칙을 만들어 보았습니다.
+서비스의 주요 업무의 경우 이력 관리가 중요합니다.  
+예를 들어 유저 등록/수정의 변경사항 , 주문변경 사항 , 처리내역(로그성) 저장 등 대다수의 서비스에 `HISTORY` key-word 의 테이블이 데이타베이스에 존재하는 이유 입니다.  
+얼마전 담당하고 있는 서비스에서 외부 연동 직후 그 이력을 저장하다 에러가 발생하여 모든 처리가 Rollback 되는 장애가 있었습니다.    
+연동처에서는 정상 처리 - 내부 DB는 원복된 상태가 되어 데이타 동기화에 문제가 발생된 것입니다.       
+이번 일을 계기로 서비스 이력 관리에 대해 개인적으로 Role을 만들어 보았습니다.
 
 - 이력관리가 메인 처리보다 중요할 수는 없습니다. ( 중요하지 않다는 의미가 아닌 메인 처리에 영향이 없어야 한다는 의미 )
 - 외부 연동 결과에 대한 이력 저장은 가급적 Transaction 을 분리하는 것이 좋습니다.
@@ -18,6 +17,8 @@
 위의 조건을 만족하는 적절한 기술을 검토한 결과 AOP 기술이 적합하다는 생각을 하게 되었습니다.
 
 #### AOP 기술의 주요 키워드
+AOP 개념 이해는 소스를 통해서 진행해 볼까 합니다만 최소한 키워드 정도는 이해하고 있어야 하기때문에  
+간단히 설명을 하고 진행 합니다.
 
 - 타겟(Target)  
 >부가기능을 부여할 대상을 의미합니다.
@@ -57,17 +58,20 @@ Around는 타겟을 실행할 지 혹은 바로 반환할지도 정할 수 있�
 >클라이언트와 타겟 사이에 투명하게 존재하여 부가기능을 제공하는 오브젝트입니다.
 DI를 통해 타겟 대신 클라이언트에게 주입되며, 클라이언트의 메소드 호출을 대신 받아 타겟에 위임해주며 부가기능을 부여합니다.
 
-#### 일단 무엇을 만들지 생각해 봅니다.
+#### 무엇을 만들것인지 
 유저를 생성하고 수정할 경우 일반적으로 이력을 남기게 됩니다.  
-유저를 생성/수정하는 것이 main task로 이력 처리는 트랜잭션을 별도로 분리합니다.    
-최초 유저 생성시에도 생성된 시간을 포함해서 기록하고자 합니다.  
-유저 정보를 수정했을 경우 수정한 내용이 어떻게 변경되었는지 기록을 하고자 합니다.
+유저를 생성/수정하는 것이 메인 태스크로 이력 처리 트랜잭션을 별도로 분리합니다.    
+최초 유저 생성 타이밍에도 이력을 ( 신규등록 )  생성된 시간 포함해서 기록 합니다.  
+유저 정보를 수정했을 경우 수정한 내용에 대해서는 before , after 값을 기록 합니다.  
+target 은 service class 로 하며 Join Point는 유저생성과 유저 수정을 대상으로 지정합니다.    
+PointCut은 Annotaion 기반으로 작성하여 대상 method 추가/삭제의 편의성을 고려 했습니다.  
 
 - Sequence diagram
 
 [![](https://mermaid.ink/img/pako:eNqFk0Fr2zAUx7-K0CkF10R2Yic-lKR0h-2y0u00cnEtJRHEUibLY1kI5L7LoBQ2aEp26Nihh64NdId9otj7DpMcu3WcwA4G673fk_7_p6cpDDgm0IMReR8TFpAT6g-EH_YYAH4sOYvDcyKyVSC5AOvVPPlxm15_0aGxLyQN6NhnEgScScFHow1czkREfKABqYa7r0-roVihZ2TMI6qOmlSzQxrp8DbwpAccHh2VRAAPpFfLdDlPLn4l3xcaLSU1m8vS4Ofl-vEq58FzgSCBBGJw7tcs5BhWo25YtmUA0z3QWaW_so-W38UY1DpdwWOGt7Btb4o-0w2PpKkTL7FGK8ihLtPlHjg5LtSly8vkYQXSx5_JRSaScUmAoIOhBLyf451j0uci6zhhuGLFtg0L_c_KWPCAEEzZ4BWn7FR90sxjtQOgawp2r7etVqb3X9UV7Rezp6_ljTd21vd364c_4O-3y3Txu6x3dyT02dlxeY0UMQEGSBerZHmjmjdPr292u7ajv9Pty80g77bmLQ3VNTO1gy8pZ6CTdSeIZclh2cPWTBYjspG3Zyqf57lwkrPQgOrc0KdYPdapruxBOSQh6UFP_WLS9-OR7MEemyk0HmNfkhdYG4Je3x9FxID6Pb-ZsAB6ui0FlD_4J0q9tXechwWkltCbwo_QayHTtdpuy2k7VqveVFcGJ9Cz7JaJmnWEkIPqDkL2zICfsvq66bYbtuUgy2m6zYY7-wc8qKmt?type=png)](https://mermaid.live/edit#pako:eNqFk0Fr2zAUx7-K0CkF10R2Yic-lKR0h-2y0u00cnEtJRHEUibLY1kI5L7LoBQ2aEp26Nihh64NdId9otj7DpMcu3WcwA4G673fk_7_p6cpDDgm0IMReR8TFpAT6g-EH_YYAH4sOYvDcyKyVSC5AOvVPPlxm15_0aGxLyQN6NhnEgScScFHow1czkREfKABqYa7r0-roVihZ2TMI6qOmlSzQxrp8DbwpAccHh2VRAAPpFfLdDlPLn4l3xcaLSU1m8vS4Ofl-vEq58FzgSCBBGJw7tcs5BhWo25YtmUA0z3QWaW_so-W38UY1DpdwWOGt7Btb4o-0w2PpKkTL7FGK8ihLtPlHjg5LtSly8vkYQXSx5_JRSaScUmAoIOhBLyf451j0uci6zhhuGLFtg0L_c_KWPCAEEzZ4BWn7FR90sxjtQOgawp2r7etVqb3X9UV7Rezp6_ljTd21vd364c_4O-3y3Txu6x3dyT02dlxeY0UMQEGSBerZHmjmjdPr292u7ajv9Pty80g77bmLQ3VNTO1gy8pZ6CTdSeIZclh2cPWTBYjspG3Zyqf57lwkrPQgOrc0KdYPdapruxBOSQh6UFP_WLS9-OR7MEemyk0HmNfkhdYG4Je3x9FxID6Pb-ZsAB6ui0FlD_4J0q9tXechwWkltCbwo_QayHTtdpuy2k7VqveVFcGJ9Cz7JaJmnWEkIPqDkL2zICfsvq66bYbtuUgy2m6zYY7-wc8qKmt)
 
 #### 이렇게 구현을 해 봅니다.
+급조한 내용으로 Advice 포인트?가 많이 있을 수 있겠지만 이력관리에 대해 AOP를 어떤 방향으로 구현했는지를 확인해 주세요. 
 
 - 주요 로직
 > Controller : 유저 정보를 추가 한다.
