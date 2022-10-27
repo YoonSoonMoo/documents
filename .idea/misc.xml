@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/aop" />
+    <file type="web" url="file://$PROJECT_DIR$/webClient" />
     <file type="web" url="file://$PROJECT_DIR$/websocket" />
     <file type="web" url="file://$PROJECT_DIR$/websocket/websocket" />
   </component>

@@ -12,6 +12,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -81,9 +82,11 @@ public class HistoryAspect {
     //@Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
     @Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
     public Object addTimer(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        long before = System.currentTimeMillis();
+        StopWatch watch = new StopWatch();
+        watch.start();
         Object ret = proceedingJoinPoint.proceed();
-        log.info(">> time  annotation : {}", System.currentTimeMillis() - before);
+        watch.stop();
+        log.info(">> time  annotation : {} ms", watch.getTotalTimeMillis());
         return ret;
     }
 }
