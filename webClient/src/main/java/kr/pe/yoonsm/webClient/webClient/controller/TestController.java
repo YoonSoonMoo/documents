@@ -1,5 +1,7 @@
 package kr.pe.yoonsm.webClient.webClient.controller;
 
+import kr.pe.yoonsm.webClient.webClient.service.WebClientCompareService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.util.StopWatch;
@@ -11,9 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class TestController {
 
-    @RequestMapping("wait")
+    final WebClientCompareService webClientCompareService;
+
+    /**
+     * 3초짜리 처리
+     * @return
+     */
+    @RequestMapping("wait3sec")
     public String waitResponse() {
         StopWatch watch = new StopWatch();
         watch.start();
@@ -24,5 +33,21 @@ public class TestController {
         }
         watch.stop();
         return "Process done!! : " + watch.getTotalTimeMillis() + " ms";
+    }
+
+    /**
+     * non-blocking 처리가 구현된 url
+     * @return
+     */
+    @RequestMapping("webclient")
+    public String connectWebClient(){
+        webClientCompareService.webClientConnect();
+        return "webClinet";
+    }
+
+    @RequestMapping("resttemplate")
+    public String restTemplateClient(){
+        webClientCompareService.restTemplateConnect();
+        return "resttemplate";
     }
 }

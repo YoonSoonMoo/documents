@@ -1,5 +1,6 @@
 package kr.pe.yoonsm.history.aop.services;
 
+import kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation;
 import kr.pe.yoonsm.history.aop.Aspect.UserHistoryAnnotation;
 import kr.pe.yoonsm.history.aop.repository.HistoryRepository;
 import kr.pe.yoonsm.history.aop.repository.UserRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- *
  * Created by yoonsm@daou.co.kr on 2022-10-11
  */
 @Service
@@ -24,7 +24,7 @@ public class UserService {   //---> AOP 의 대상이 되는 클래스를 target
     final UserRepository userRepository;
 
     @UserHistoryAnnotation
-    //  @TimerAnnotation -> point cut으로 설정
+    @TimerAnnotation // -> pointcut 을 within 으로 대체하면 쓸일이 없다.
     public boolean addUser(UserDao userDao) {
         userRepository.insertData(userDao);
         log.info("유저를 추가했습니다. | UserService.addUser : {}", userDao);

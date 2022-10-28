@@ -12,6 +12,15 @@ import java.lang.reflect.InvocationTargetException;
  */
 @Component
 public class CommonService {
+
+    /**
+     * 2개의 오브젝트 요소들을 비교하여 틀린 값을 취합한다.
+     * @param target1
+     * @param target2
+     * @param targetClass
+     * @return
+     * @param <T>
+     */
     public <T> String diff(T target1, T target2, Class<T> targetClass) {
         StringBuilder sb = new StringBuilder();
         try {

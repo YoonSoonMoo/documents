@@ -47,7 +47,7 @@ public class HistoryAspect {
         //UserDao userDaoDb = userRepository.findByUserId(userDao.getUserId());
         if (userDao != null) {
             userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
-            log.info("Parameter first Db values {}", userDaoDb);
+            log.info("UserDao DB values {}", userDaoDb);
         }
 
         // Main 처리  JoinPoint 기준 위 / 아래 양쪽에 구현되어 있다.
@@ -61,7 +61,7 @@ public class HistoryAspect {
                 HistoryDao historyDao = new HistoryDao();
                 historyDao.setSeq(historyRepository.getAllData().size());
                 historyDao.setLocalDateTime(LocalDateTime.now());
-                log.info("Parameter values {}", userDao);
+                log.info("UserDao Parameter values {}", userDao);
                 // DB에 데이타가 존재하므로 update 처리
                 if (userDaoDb != null) {
                     String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
@@ -79,14 +79,15 @@ public class HistoryAspect {
         return ret;
     }
 
-    //@Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
-    @Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
+
+    //@Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
+    @Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
     public Object addTimer(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         StopWatch watch = new StopWatch();
         watch.start();
         Object ret = proceedingJoinPoint.proceed();
         watch.stop();
-        log.info(">> time  annotation : {} ms", watch.getTotalTimeMillis());
+        log.info(">> process time : {} ms", watch.getTotalTimeMillis());
         return ret;
     }
 }
