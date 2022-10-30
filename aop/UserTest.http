@@ -1,0 +1,38 @@
+### 신규 유저를 추가한다.
+POST http://localhost:8080/api/adduser
+Content-Type: application/json
+
+{
+  "userId" : "yoonsm",
+  "userName" : "윤순무",
+  "age" : 48 ,
+  "address1": "오금로 43",
+  "address2" : "율곡아파트"
+}
+
+### 유저를 수정한다. ( 나이와 주소2를 수정 )
+POST http://localhost:8080/api/edituser
+Content-Type: application/json
+
+{
+  "userId" : "yoonsm",
+  "userName" : "윤순무",
+  "age" : 45 ,
+  "address1": "오금로 43",
+  "address2" : "율곡아파트 432동"
+}
+
+### 유저를 수정한다. ( 주소1과 주소2 수정 )
+POST http://localhost:8080/api/edituser
+Content-Type: application/json
+
+{
+  "userId" : "yoonsm",
+  "userName" : "윤순무",
+  "age" : 45 ,
+  "address1": "오금로 513",
+  "address2" : "파랑 아파트 22동"
+}
+
+### 이력을 조회한다.
+GET http://localhost:8080/api/history/all
