@@ -29,10 +29,6 @@ public class CommonService {
                 Object fromValue = pd.getReadMethod().invoke(fromStr);
                 Object toValue = pd.getReadMethod().invoke(toStr);
 
-//                if(fromValue != null && toValue instanceof String ) {
-//                    if(!StringUtils.hasLength(toValue.toString())) break;
-//                }
-
                 boolean isEqualValue = toValue != null && ((fromValue == toValue) || (fromValue.equals(toValue)));
                 // 같지 않은 값이 있다면
                 if (!isEqualValue) {

@@ -94,7 +94,7 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
     final UserRepository userRepository;
 
     @UserHistoryAnnotation
-    //  @TimerAnnotation -> point cut으로 설정
+    //  @TimerAnnotation -> within 으로 대체
     public boolean addUser(UserDao userDao) {
         userRepository.insertData(userDao);
         log.info("유저를 추가했습니다. : {}", userDao);
@@ -130,9 +130,8 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
         // 커밋되기 전의 값을 미리 세팅 해야 한다. ( deep copy ) Memory repository 이기 때문에...
         //UserDao userDaoDb = userRepository.findByUserId(userDao.getUserId());
         if (userDao != null) {
-            userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(
-                    userRepository.findByUserId(userDao.getUserId())), UserDao.class);
-            log.info("Db values {}", userDaoDb);
+            userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
+            log.info("UserDao DB values {}", userDaoDb);
         }
 
         // Main 처리  JoinPoint 기준 위 / 아래 양쪽에 구현되어 있다.
@@ -142,14 +141,14 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
 
         // insert / update 가 성공일 경우 history를 저장한다.
         if (ret instanceof Boolean && userDao != null) {
-            if (userDao != null && ((Boolean) ret).booleanValue()) {
+            if (((Boolean) ret).booleanValue()) {
                 HistoryDao historyDao = new HistoryDao();
                 historyDao.setSeq(historyRepository.getAllData().size());
                 historyDao.setLocalDateTime(LocalDateTime.now());
-                log.info("Parameter values {}", userDao);
+                log.info("UserDao Parameter values {}", userDao);
                 // DB에 데이타가 존재하므로 update 처리
                 if (userDaoDb != null) {
-                    String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
+                    String changedString = commonService.diff(userDaoDb,userDao, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
                         historyRepository.addHistory(historyDao);
@@ -166,20 +165,21 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
 
 ```
 
+
 > Common : 두 객체간의 변경된 값 비교
 ```java
-    public <T> String diff(T target1, T target2, Class<T> targetClass) {
+    public <T> String diff(T fromStr, T toStr, Class<T> targetClass) {
         StringBuilder sb = new StringBuilder();
         try {
             for (PropertyDescriptor pd : Introspector.getBeanInfo(targetClass, Object.class).getPropertyDescriptors()) {
-                Object value1 = pd.getReadMethod().invoke(target1);
-                Object value2 = pd.getReadMethod().invoke(target2);
+                Object fromValue = pd.getReadMethod().invoke(fromStr);
+                Object toValue = pd.getReadMethod().invoke(toStr);
 
-                boolean isEqualValue = (value1 == value2) || (value1 != null && value1.equals(value2));
+                boolean isEqualValue = toValue != null && ((fromValue == toValue) || (fromValue.equals(toValue)));
                 // 같지 않은 값이 있다면
                 if (!isEqualValue) {
-                    sb.append(pd.getName()).append(" changed ").append(value1)
-                            .append("->").append(value2)
+                    sb.append(pd.getName()).append(" changed ").append(fromValue)
+                            .append("->").append(toValue)
                             .append(" ");
                 }
             }
@@ -188,25 +188,27 @@ PointCut은 Annotaion 기반으로 작성하여 대상 Method에 추가/삭제 �
         }
         return sb.toString();
     }
+
 ```
+
 #### 로그출력
 신규유저를 등록하고 이후 이름을 변경한 로그 입니다.
 
 ```css
-2022-10-22 16:46:13.370  UserRepository : UserDB count : 0
-2022-10-22 16:46:13.419  HistoryAspect  : Parameter first Db values null
-2022-10-22 16:46:13.433  UserService    : 유저를 추가했습니다. | UserService.addUser : UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
-2022-10-22 16:46:13.439  HistoryAspect  : >> time  annotation : 20
-2022-10-22 16:46:13.439  HistoryAspect  : main process complete!!
-2022-10-22 16:46:13.443  HistoryAspect  : Parameter values UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
-2022-10-22 16:46:13.443  HistoryAspect  : History Annotation Changed data : yoonsm 신규추가
+2022-10-30 16:46:13.370  UserRepository : UserDB count : 0
+2022-10-30 16:46:13.419  HistoryAspect  : Parameter first Db values null
+2022-10-30 16:46:13.433  UserService    : 유저를 추가했습니다. | UserService.addUser : UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
+2022-10-30 16:46:13.439  HistoryAspect  : >> time  annotation : 20
+2022-10-30 16:46:13.439  HistoryAspect  : main process complete!!
+2022-10-30 16:46:13.443  HistoryAspect  : Parameter values UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
+2022-10-30 16:46:13.443  HistoryAspect  : History Annotation Changed data : yoonsm 신규추가
 						 
-2022-10-22 16:46:13.444  UserRepository : UserDB count : 1
-2022-10-22 16:46:13.464  HistoryAspect  : Parameter first Db values UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
-2022-10-22 16:46:13.465  UserRepository : UserDB count : 1
-2022-10-22 16:46:13.465  UserService    : 유저를 수정했습니다. | UserService.editUser : UserDao(userId=yoonsm, userName=윤유림, age=48, address1=강동구, address2=둔촌2동 98)
-2022-10-22 16:46:13.466  HistoryAspect  : >> time  annotation : 1
-2022-10-22 16:46:13.466  HistoryAspect  : main process complete!!
-2022-10-22 16:46:13.466  HistoryAspect  : Parameter values UserDao(userId=yoonsm, userName=윤유림, age=48, address1=강동구, address2=둔촌2동 98)
-2022-10-22 16:46:13.467  HistoryAspect  : History Annotation Changed data : userName changed 윤순무->윤유림 
+2022-10-30 16:46:13.444  UserRepository : UserDB count : 1
+2022-10-30 16:46:13.464  HistoryAspect  : Parameter first Db values UserDao(userId=yoonsm, userName=윤순무, age=48, address1=강동구, address2=둔촌2동 98)
+2022-10-30 16:46:13.465  UserRepository : UserDB count : 1
+2022-10-30 16:46:13.465  UserService    : 유저를 수정했습니다. | UserService.editUser : UserDao(userId=yoonsm, userName=윤유림, age=48, address1=강동구, address2=둔촌2동 98)
+2022-10-30 16:46:13.466  HistoryAspect  : >> time  annotation : 1
+2022-10-30 16:46:13.466  HistoryAspect  : main process complete!!
+2022-10-30 16:46:13.466  HistoryAspect  : Parameter values UserDao(userId=yoonsm, userName=윤유림, age=48, address1=강동구, address2=둔촌2동 98)
+2022-10-30 16:46:13.467  HistoryAspect  : History Annotation Changed data : userName changed 윤순무->윤유림 
 ```
