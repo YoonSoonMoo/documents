@@ -47,6 +47,7 @@ public class HistoryAspect {
         //UserDao userDaoDb = userRepository.findByUserId(userDao.getUserId());
         if (userDao != null) {
             userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
+            //BeanUtils.copyProperties(userRepository.findByUserId(userDao.getUserId()), userDaoDb); //-- 내부의 객체가 모두 null 이 아니어야 한다. ( 귀찮음 )
             log.info("UserDao DB values {}", userDaoDb);
         }
 
@@ -64,7 +65,7 @@ public class HistoryAspect {
                 log.info("UserDao Parameter values {}", userDao);
                 // DB에 데이타가 존재하므로 update 처리
                 if (userDaoDb != null) {
-                    String changedString = commonService.diff(userDaoDb,userDao, UserDao.class);
+                    String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
                         historyRepository.addHistory(historyDao);
@@ -80,8 +81,8 @@ public class HistoryAspect {
     }
 
 
-    //@Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
-    @Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
+    @Around("within(kr.pe.yoonsm.history.aop.services.*)") // --> 포인트컷(PointCut) 클래스 위치로 선정
+    //@Around("@annotation(kr.pe.yoonsm.history.aop.Aspect.TimerAnnotation)")
     public Object addTimer(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         StopWatch watch = new StopWatch();
         watch.start();
