@@ -57,14 +57,14 @@ public class HistoryAspect {
 
         // insert / update 가 성공일 경우 history를 저장한다.
         if (ret instanceof Boolean && userDao != null) {
-            if (userDao != null && ((Boolean) ret).booleanValue()) {
+            if (((Boolean) ret).booleanValue()) {
                 HistoryDao historyDao = new HistoryDao();
                 historyDao.setSeq(historyRepository.getAllData().size());
                 historyDao.setLocalDateTime(LocalDateTime.now());
                 log.info("UserDao Parameter values {}", userDao);
                 // DB에 데이타가 존재하므로 update 처리
                 if (userDaoDb != null) {
-                    String changedString = commonService.diff(userDaoDb, userDao, UserDao.class);
+                    String changedString = commonService.diff(userDaoDb,userDao, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
                         historyRepository.addHistory(historyDao);

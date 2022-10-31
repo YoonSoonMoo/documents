@@ -18,8 +18,8 @@ Content-Type: application/json
   "userId" : "yoonsm",
   "userName" : "윤순무",
   "age" : 45 ,
-  "address1": "오금로 43",
-  "address2" : "율곡아파트 432동"
+  "address1": "수지구",
+  "address2" : "죽전아파트 32동"
 }
 
 ### 유저를 수정한다. ( 주소1과 주소2 수정 )

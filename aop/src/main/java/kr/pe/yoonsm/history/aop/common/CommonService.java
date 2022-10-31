@@ -1,6 +1,7 @@
 package kr.pe.yoonsm.history.aop.common;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -15,24 +16,28 @@ public class CommonService {
 
     /**
      * 2개의 오브젝트 요소들을 비교하여 틀린 값을 취합한다.
-     * @param target1
-     * @param target2
+     * @param fromStr
+     * @param toStr
      * @param targetClass
      * @return
      * @param <T>
      */
-    public <T> String diff(T target1, T target2, Class<T> targetClass) {
+    public <T> String diff(T fromStr, T toStr, Class<T> targetClass) {
         StringBuilder sb = new StringBuilder();
         try {
             for (PropertyDescriptor pd : Introspector.getBeanInfo(targetClass, Object.class).getPropertyDescriptors()) {
-                Object value1 = pd.getReadMethod().invoke(target1);
-                Object value2 = pd.getReadMethod().invoke(target2);
+                Object fromValue = pd.getReadMethod().invoke(fromStr);
+                Object toValue = pd.getReadMethod().invoke(toStr);
 
-                boolean isEqualValue = (value1 == value2) || (value1 != null && value1.equals(value2));
+//                if(fromValue != null && toValue instanceof String ) {
+//                    if(!StringUtils.hasLength(toValue.toString())) break;
+//                }
+
+                boolean isEqualValue = toValue != null && ((fromValue == toValue) || (fromValue.equals(toValue)));
                 // 같지 않은 값이 있다면
                 if (!isEqualValue) {
-                    sb.append(pd.getName()).append(" changed ").append(value1)
-                            .append("->").append(value2)
+                    sb.append(pd.getName()).append(" changed ").append(fromValue)
+                            .append("->").append(toValue)
                             .append(" ");
                 }
             }
