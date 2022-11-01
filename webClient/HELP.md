@@ -1,24 +1,19 @@
-# Getting Started
+### 웹클라이언트 사용 ( non-blocking )
+http://localhost:8080/webclient
+결과
+```logcatfilter
+2022-11-01 14:41:48.243  INFO 12548 --- [nio-8080-exec-2] k.p.y.w.w.s.WebClientCompareService      : ---- webClientConnect start!
+2022-11-01 14:41:51.828  INFO 12548 --- [nio-8080-exec-2] k.p.y.w.w.s.WebClientCompareService      : ---- webClientConnect over!!
+2022-11-01 14:41:54.961  INFO 12548 --- [ctor-http-nio-2] k.p.y.w.w.s.WebClientCompareService      : resultFor3Sec: Process done!! : 3003 ms
+2022-11-01 14:41:54.961  INFO 12548 --- [ctor-http-nio-2] k.p.y.w.w.s.WebClientCompareService      : Total result(3Sec): 6717
+```
 
-### Reference Documentation
-For further reference, please consider the following sections:
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.7.5/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.7.5/gradle-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.7.5/reference/htmlsingle/#web)
-* [Spring Reactive Web](https://docs.spring.io/spring-boot/docs/2.7.5/reference/htmlsingle/#web.reactive)
-
-### Guides
-The following guides illustrate how to use some features concretely:
-
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
-* [Building a Reactive RESTful Web Service](https://spring.io/guides/gs/reactive-rest-service/)
-
-### Additional Links
-These additional references should also help you:
-
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
+### 레스트템플릿 ( blocking)
+http://localhost:8080/resttemplate
+결과
+```logcatfilter
+2022-11-01 14:43:56.979  INFO 12548 --- [io-8080-exec-10] k.p.y.w.w.s.WebClientCompareService      : ---- restTemplateConnect start!
+2022-11-01 14:43:59.995  INFO 12548 --- [io-8080-exec-10] k.p.y.w.w.s.WebClientCompareService      : Total result(3Sec): 3016
+2022-11-01 14:43:59.996  INFO 12548 --- [io-8080-exec-10] k.p.y.w.w.s.WebClientCompareService      : ---- restTemplateConnect over!
+```
