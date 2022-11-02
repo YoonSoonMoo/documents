@@ -31,7 +31,7 @@ public class WebClientCompareService {
                 .bodyToMono(String.class);
 
         resultFor3Sec.subscribe(result -> {
-            log.info("resultFor3Sec: {}", result);
+            //log.info("resultFor3Sec: {}", result);
             if (stopWatch.isRunning()) {
                 stopWatch.stop();
             }

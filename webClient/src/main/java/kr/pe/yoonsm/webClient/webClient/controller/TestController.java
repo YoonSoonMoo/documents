@@ -41,13 +41,23 @@ public class TestController {
      */
     @RequestMapping("webclient")
     public String connectWebClient(){
+        StopWatch watch = new StopWatch();
+        watch.start();
         webClientCompareService.webClientConnect();
-        return "webClinet";
+        webClientCompareService.webClientConnect();
+        webClientCompareService.webClientConnect();
+        watch.stop();
+        return "webClinet : "+watch.getTotalTimeSeconds();
     }
 
     @RequestMapping("resttemplate")
     public String restTemplateClient(){
+        StopWatch watch = new StopWatch();
+        watch.start();
         webClientCompareService.restTemplateConnect();
-        return "resttemplate";
+        webClientCompareService.restTemplateConnect();
+        webClientCompareService.restTemplateConnect();
+        watch.stop();
+        return "resttemplate : "+watch.getTotalTimeSeconds();
     }
 }
