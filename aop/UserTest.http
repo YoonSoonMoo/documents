@@ -1,5 +1,5 @@
-### 신규 유저를 추가한다.
-POST http://localhost:8080/api/adduser
+### [MemoryRepository]신규 유저를 추가한다.
+POST http://localhost:8080/api/v1/adduser
 Content-Type: application/json
 
 {
@@ -10,8 +10,8 @@ Content-Type: application/json
   "address2" : "율곡아파트"
 }
 
-### 유저를 수정한다. ( 나이와 주소2를 수정 )
-POST http://localhost:8080/api/edituser
+### [MemoryRepository]유저를 수정한다. ( 나이와 주소2를 수정 )
+POST http://localhost:8080/api/v1/edituser
 Content-Type: application/json
 
 {
@@ -22,8 +22,8 @@ Content-Type: application/json
   "address2" : "죽전아파트 32동"
 }
 
-### 유저를 수정한다. ( 주소1과 주소2 수정 )
-POST http://localhost:8080/api/edituser
+### [MemoryRepository]유저를 수정한다. ( 주소1과 주소2 수정 )
+POST http://localhost:8080/api/v1/edituser
 Content-Type: application/json
 
 {
@@ -34,5 +34,5 @@ Content-Type: application/json
   "address2" : "파랑 아파트 22동"
 }
 
-### 이력을 조회한다.
-GET http://localhost:8080/api/history/all
+### [MemoryRepository]이력을 조회한다.
+GET http://localhost:8080/api/v1/history/all

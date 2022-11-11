@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    # memory db를 사용하는 경우
+    #url: jdbc:h2:mem:platform
+    # file base 로 db를 사용하는 경우 기동시 데이타를 취득한다.
+    url: jdbc:h2:file:./h2_db/platformDB;AUTO_SERVER=TRUE
+    username: yoonsm
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      path: /testdb
+      enabled: true
