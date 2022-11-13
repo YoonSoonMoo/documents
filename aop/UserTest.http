@@ -36,3 +36,30 @@ Content-Type: application/json
 
 ### [MemoryRepository]이력을 조회한다.
 GET http://localhost:8080/api/v1/history/all
+
+### [DBRepository]신규 유저를 추가한다.
+POST http://localhost:8080/api/v2/adduser
+Content-Type: application/json
+
+{
+  "userId" : "yoonsm",
+  "userName" : "윤순무",
+  "age" : 48 ,
+  "address1": "오금로 43",
+  "address2" : "율곡아파트"
+}
+
+### [DBRepository]유저를 수정한다. ( 주소1과 주소2 수정 )
+POST http://localhost:8080/api/v2/edituser
+Content-Type: application/json
+
+{
+  "userId" : "yoonsm",
+  "userName" : "윤순무",
+  "age" : 45 ,
+  "address1": "오금로 513",
+  "address2" : "파랑 아파트 22동"
+}
+
+### [DBRepository]이력을 조회한다.
+GET http://localhost:8080/api/v2/history/all
