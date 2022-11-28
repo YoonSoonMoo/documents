@@ -1,11 +1,15 @@
 package kr.pe.yoonsm.history.aop.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.pe.yoonsm.history.aop.repository.dao.UserDao;
+import kr.pe.yoonsm.history.aop.repository.dao.UserEntity;
 import kr.pe.yoonsm.history.aop.services.UserDBService;
 import kr.pe.yoonsm.history.aop.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
 
 /**
  * Created by yoonsm@daou.co.kr on 2022-10-11
@@ -14,14 +18,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v2")
 @Slf4j
 @AllArgsConstructor
+//@Transactional
 public class UserControllerV2 {
 
     final UserDBService userDBService;
+    final ObjectMapper objectMapper;
 
     @ResponseBody
     @RequestMapping(value = "/user/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String getUserInfo(@PathVariable("userId") String userId) {
-        UserDao userDao = userDBService.getUserInfoByUserId(userId);
+        UserEntity userDao = userDBService.getUserInfoByUserId(userId);
         if (userDao == null) return "유저가 없습니다.";
         return userDao.toString();
     }
@@ -35,7 +41,6 @@ public class UserControllerV2 {
     @ResponseBody
     @RequestMapping(value = "/adduser", method = {RequestMethod.POST})
     public String addUser(@RequestBody UserDao userDao) {
-
         if (userDBService.getUserInfoByUserId(userDao.getUserId()) != null) {
             return "이미 있는 유저 입니다.";
         }
