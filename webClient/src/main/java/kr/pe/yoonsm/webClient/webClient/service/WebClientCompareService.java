@@ -1,7 +1,9 @@
 package kr.pe.yoonsm.webClient.webClient.service;
 
+import kr.pe.yoonsm.webClient.webClient.controller.event.MyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestTemplate;
@@ -50,6 +52,15 @@ public class WebClientCompareService {
 
         log.info("Total result(3Sec): {}", stopWatch.getTotalTimeMillis());
         log.info("---- restTemplateConnect over!");
+
     }
 
+    /**
+     * 애노테이션을 사용해서 수신
+     * @param myEvent
+     */
+    @EventListener(MyEvent.class)
+    public void eventListener(MyEvent myEvent){
+        log.info(myEvent.getEventKey());
+    }
 }
