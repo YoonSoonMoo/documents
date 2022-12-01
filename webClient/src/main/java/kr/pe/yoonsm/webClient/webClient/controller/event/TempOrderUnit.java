@@ -8,25 +8,32 @@ import java.util.concurrent.TimeUnit;
  * Created by yoonsm@daou.co.kr on 2022-11-30
  */
 @Slf4j
-public class TempOrderUnit implements Runnable, OrderChangeEvent {
-
+public class TempOrderUnit implements Runnable {
     boolean runFlg = true;
+    String orderKey;
+
+    public TempOrderUnit(String orderKey) {
+        this.orderKey = orderKey;
+    }
 
     @Override
     public void run() {
         try {
             TimeUnit.SECONDS.sleep(10);
-            if (runFlg) log.info("실행되었음 : {}", runFlg);
+            if (runFlg) {
+               log.info("실행되었음 : {}", orderKey);
+            } else {
+               log.info("실행되지 않았음: {}" ,orderKey);
+            } 
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
-    public void update(String orderNo) {
+    public void expired() {
         // event가 불리우면 실행됨
-        log.info("OrderChangeEvent 실행 : {}", orderNo);
+        log.info("OrderChangeEvent 발생 : {}", orderKey);
         this.runFlg = false;
     }
 }
