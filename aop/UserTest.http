@@ -63,3 +63,7 @@ Content-Type: application/json
 
 ### [DBRepository]이력을 조회한다.
 GET http://localhost:8080/api/v2/history/all
+
+
+### [DBRepository]캐시를 삭제한다.
+GET http://localhost:8080/api/v2/clear/cache

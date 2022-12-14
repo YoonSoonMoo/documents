@@ -75,4 +75,14 @@ public class UserControllerV2 {
         });
         return returnValue.toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/clear/cache", method = {RequestMethod.GET})
+    public String clearCache() {
+
+        userDBService.clearCache();
+        return "OK";
+    }
+
+
 }
