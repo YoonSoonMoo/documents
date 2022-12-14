@@ -2,6 +2,7 @@ package kr.pe.yoonsm.history.aop.repository.dao;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
  */
 @Entity(name="YS_HISTORY")
 @Setter
+@Getter
+@ToString
 public class HistoryEntity {
 
     @Id

@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 @RequestMapping("/api/v2")
 @Slf4j
 @AllArgsConstructor
-//@Transactional
 public class UserControllerV2 {
 
     final UserDBService userDBService;

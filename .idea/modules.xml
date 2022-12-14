@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/aop.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/documents.iml" filepath="$PROJECT_DIR$/.idea/documents.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webClient.main.iml" filepath="$PROJECT_DIR$/.idea/modules/webClient.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webClient.test.iml" filepath="$PROJECT_DIR$/.idea/modules/webClient.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/websocket.main.iml" filepath="$PROJECT_DIR$/.idea/modules/websocket.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/websocket.test.iml" filepath="$PROJECT_DIR$/.idea/modules/websocket.test.iml" />
     </modules>
   </component>
 </project>

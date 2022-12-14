@@ -56,7 +56,7 @@ Content-Type: application/json
 {
   "userId" : "yoonsm",
   "userName" : "윤순무",
-  "age" : 45 ,
+  "age" : 46 ,
   "address1": "오금로 513",
   "address2" : "파랑 아파트 22동"
 }
