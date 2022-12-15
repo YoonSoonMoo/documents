@@ -6,7 +6,7 @@ Content-Type: application/json
   "userId" : "yoonsm",
   "userName" : "윤순무",
   "age" : 48 ,
-  "address1": "오금로 43",
+  "address1": "죽전로 43",
   "address2" : "율곡아파트"
 }
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 {
   "userId" : "yoonsm",
   "userName" : "윤순무",
-  "age" : 45 ,
+  "age" : 30 ,
   "address1": "수지구",
   "address2" : "죽전아파트 32동"
 }
@@ -29,8 +29,8 @@ Content-Type: application/json
 {
   "userId" : "yoonsm",
   "userName" : "윤순무",
-  "age" : 45 ,
-  "address1": "오금로 513",
+  "age" : 31 ,
+  "address1": "죽전로 513",
   "address2" : "파랑 아파트 22동"
 }
 
@@ -44,8 +44,8 @@ Content-Type: application/json
 {
   "userId" : "yoonsm",
   "userName" : "윤순무",
-  "age" : 48 ,
-  "address1": "오금로 43",
+  "age" : 30 ,
+  "address1": "죽전로 43",
   "address2" : "율곡아파트"
 }
 
@@ -56,14 +56,13 @@ Content-Type: application/json
 {
   "userId" : "yoonsm",
   "userName" : "윤순무",
-  "age" : 46 ,
-  "address1": "오금로 513",
+  "age" : 31 ,
+  "address1": "죽전로 513",
   "address2" : "파랑 아파트 22동"
 }
 
 ### [DBRepository]이력을 조회한다.
 GET http://localhost:8080/api/v2/history/all
-
 
 ### [DBRepository]캐시를 삭제한다.
 GET http://localhost:8080/api/v2/clear/cache

@@ -59,11 +59,19 @@ public class UserDBService {   //---> AOP 의 대상이 되는 클래스를 targ
         return true;
     }
 
+    /**
+     * 유저 변경 이력을 모두 조회한다.
+     * 조회된 내용은 ehCache에 저장된다.
+     * @return
+     */
     @Cacheable(cacheNames = "findUserHistoryCache" )
     public List<HistoryEntity> getAllHistory() {
         return historyDataJpaRepository.findAll();
     }
 
+    /**
+     * 캐시에 저장되어 있는 내용을 삭제한다.
+     */
     @CacheEvict(cacheNames ="findUserHistoryCache",allEntries = true)
     public void clearCache(){
         log.info("cache clear!!");
