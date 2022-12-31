@@ -41,21 +41,12 @@ public class HistoryDBAspect {
         UserDao userDao = (UserDao) Arrays.stream(proceedingJoinPoint.getArgs())
                 .sequential()
                 .filter(data -> (data instanceof UserDao)).findFirst().orElse(null);
-        UserEntity userDaoReq = objectMapper.convertValue(userDao,UserEntity.class);
-
-        // 커밋되기 전의 값을 미리 세팅 해야 한다. ( deep copy ) Memory repository 이기 때문에...
-        UserEntity userDaoDb = userRepository.findByUserId(userDao.getUserId());
-//        if (userDao != null) {
-//            userDaoDb = objectMapper.treeToValue(objectMapper.valueToTree(userRepository.findByUserId(userDao.getUserId())), UserDao.class);
-//            //BeanUtils.copyProperties(userRepository.findByUserId(userDao.getUserId()), userDaoDb); //-- 내부의 객체가 모두 null 이 아니어야 한다. ( 귀찮음 )
-//            log.info("UserDao DB values {}", userDaoDb);
-//        }
+        UserDao compareDbData = objectMapper.convertValue(userRepository.findByUserId(userDao.getUserId()),UserDao.class);
 
         // Main 처리  JoinPoint 기준 위 / 아래 양쪽에 구현되어 있다.
         Object ret = proceedingJoinPoint.proceed();
 
         log.info("main process complete!!");
-
         // insert / update 가 성공일 경우 history를 저장한다.
         if (ret instanceof Boolean && userDao != null) {
             if (((Boolean) ret).booleanValue()) {
@@ -63,8 +54,8 @@ public class HistoryDBAspect {
                 historyDao.setLocalDateTime(LocalDateTime.now());
                 log.info("UserDao Parameter values {}", userDao);
                 // DB에 데이타가 존재하므로 update 처리
-                if (userDaoDb != null) {
-                    String changedString = commonService.diff(userDaoReq, userDaoDb, UserEntity.class);
+                if (compareDbData != null) {
+                    String changedString = commonService.diff(userDao, compareDbData, UserDao.class);
                     if (changedString.length() > 0) {
                         historyDao.setChangeData(changedString);
                         historyRepository.save(historyDao);

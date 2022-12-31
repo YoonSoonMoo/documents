@@ -2,11 +2,13 @@ package kr.pe.yoonsm.history.aop.repository.dao;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +16,9 @@ import java.time.LocalDateTime;
  */
 @Entity(name="YS_HISTORY")
 @Setter
-public class HistoryEntity {
+@Getter
+@ToString
+public class HistoryEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

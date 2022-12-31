@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 @RequestMapping("/api/v2")
 @Slf4j
 @AllArgsConstructor
-//@Transactional
 public class UserControllerV2 {
 
     final UserDBService userDBService;
@@ -76,4 +75,14 @@ public class UserControllerV2 {
         });
         return returnValue.toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/clear/cache", method = {RequestMethod.GET})
+    public String clearCache() {
+
+        userDBService.clearCache();
+        return "OK";
+    }
+
+
 }
