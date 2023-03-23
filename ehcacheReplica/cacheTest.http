@@ -1,0 +1,19 @@
+### [MemoryRepository] 전화매핑 정보를 넣는다.
+POST http://localhost:8083/cache/call/save
+Content-Type: application/json
+
+{
+  "seq" : "1",
+  "callId" : "12345",
+  "callPhoneNo" : "010-1111-2222" ,
+  "receivePhoneNo": "010-3333-4444"
+}
+
+### [DBRepository] 3번 서버의 캐시에서 정보를 읽어온다.
+GET http://localhost:8083/cache/call/read
+
+### [DBRepository] 4번 서버의 캐시에서 정보를 읽어온다.
+GET http://localhost:8084/cache/call/read
+
+### [DBRepository] 5번 서버의 캐시에서 정보를 읽어온다.
+GET http://localhost:8085/cache/call/read
