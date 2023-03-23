@@ -1,0 +1,37 @@
+replication:
+  value: 1
+---
+spring:
+  profiles: local1
+server:
+  port: 8081
+logging:
+  config: classpath:log4j2.xml
+---
+spring:
+  profiles: local2
+server:
+  port: 8082
+logging:
+  config: classpath:log4j2.xml
+---
+spring:
+  profiles: local3
+server:
+  port: 8083
+logging:
+  config: classpath:log4j2.xml
+---
+spring:
+  profiles: local4
+server:
+  port: 8084
+logging:
+  config: classpath:log4j2.xml
+---
+spring:
+  profiles: local5
+server:
+  port: 8085
+logging:
+  config: classpath:log4j2.xml
