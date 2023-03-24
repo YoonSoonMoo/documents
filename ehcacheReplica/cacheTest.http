@@ -5,15 +5,24 @@ Content-Type: application/json
 {
   "seq" : "1",
   "callId" : "12345",
-  "callPhoneNo" : "010-1111-2222" ,
+  "callPhoneNo" : "010-1111-3333" ,
   "receivePhoneNo": "010-3333-4444"
 }
 
-### [DBRepository] 3번 서버의 캐시에서 정보를 읽어온다.
-GET http://localhost:8083/cache/call/read
+### [DBRepository] 3번 서버의 캐시에서 정보를 읽어온다. (1번정보)
+GET http://localhost:8083/cache/call/read/no/1
+
+### [DBRepository] 3번 서버의 모든 정보를 읽어온다
+GET http://localhost:8083/cache/call/read/all
+
+### [DBRepository] 3번 서버의 캐시에서 특정 캐시를 삭제한다.
+GET http://localhost:8083/cache/call/clear/1
 
 ### [DBRepository] 4번 서버의 캐시에서 정보를 읽어온다.
-GET http://localhost:8084/cache/call/read
+GET http://localhost:8084/cache/call/read/no/1
+
+### [DBRepository] 4번 서버의 캐시에서 정보를 읽어온다.
+GET http://localhost:8084/cache/call/clear
 
 ### [DBRepository] 5번 서버의 캐시에서 정보를 읽어온다.
 GET http://localhost:8085/cache/call/read
