@@ -85,7 +85,7 @@ public class CacheReplicationService {
      */
     public void eventPublish(String seq) {
         log.info("eventPublish seq : {}", seq);
-        applicationEventPublisher.publishEvent( new CallMappingEvent(this, seq, ""));
+        applicationEventPublisher.publishEvent( new CallMappingEvent(seq, ""));
     }
 
 }

@@ -10,7 +10,7 @@ public class CallMappingEvent {
     private String seqNo;
     private String callId;
 
-    public CallMappingEvent(Object source, String seqNo, String callId) {
+    public CallMappingEvent(String seqNo, String callId) {
         this.seqNo = seqNo;
         this.callId = callId;
     }
