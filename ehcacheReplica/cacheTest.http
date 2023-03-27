@@ -1,4 +1,4 @@
-### [MemoryRepository] 전화매핑 정보를 넣는다.
+### [MemoryRepository] 전화매핑 정보를 넣는다. ( 3번 서버 )
 POST http://localhost:8083/cache/call/save
 Content-Type: application/json
 
@@ -9,20 +9,31 @@ Content-Type: application/json
   "receivePhoneNo": "010-3333-4444"
 }
 
-### [DBRepository] 3번 서버의 캐시에서 정보를 읽어온다. (1번정보)
+### [MemoryRepository] 3번 서버의 캐시에서 정보를 읽어온다. (seq 1)
 GET http://localhost:8083/cache/call/read/no/1
 
-### [DBRepository] 3번 서버의 모든 정보를 읽어온다
+### [MemoryRepository] 3번 서버의 모든 정보를 읽어온다 ( 캐시가 아닌 MemoryRepository )
 GET http://localhost:8083/cache/call/read/all
 
-### [DBRepository] 3번 서버의 캐시에서 특정 캐시를 삭제한다.
+### [MemoryRepository] 3번 서버의 캐시에서 특정 캐시를 삭제한다. (3번 서버, 동기화된 타 서버도 삭제된다. )
 GET http://localhost:8083/cache/call/clear/1
 
-### [DBRepository] 4번 서버의 캐시에서 정보를 읽어온다.
+### [MemoryRepository] 4번 서버의 캐시에서 정보를 읽어온다. ( 3번 서버에서 삭제했다면 null )
 GET http://localhost:8084/cache/call/read/no/1
 
-### [DBRepository] 4번 서버의 캐시에서 정보를 읽어온다.
+### [MemoryRepository] 4번 서버의 캐시에서 정보를 모두 클리어 한다. ( 4번 서버의 모든 캐시를 삭제 동시에 3번 서버도 클리어 )
 GET http://localhost:8084/cache/call/clear
 
-### [DBRepository] 5번 서버의 캐시에서 정보를 읽어온다.
-GET http://localhost:8085/cache/call/read
+### [처리일시 중단] 전화매핑 정보를 진행 특정 이벤트가 발생할때까지 대기( seq 2 )
+POST http://localhost:8083/cache/v2/call/save
+Content-Type: application/json
+
+{
+  "seq" : "2",
+  "callId" : "12345",
+  "callPhoneNo" : "010-1111-3333" ,
+  "receivePhoneNo": "010-3333-4444"
+}
+
+### [처리일시 중단] 이벤트 발생
+GET http://localhost:8084/cache/v2/call/kick/2
