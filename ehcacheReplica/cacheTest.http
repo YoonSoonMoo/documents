@@ -36,4 +36,4 @@ Content-Type: application/json
 }
 
 ### [처리일시 중단] 이벤트 발생
-GET http://localhost:8084/cache/v2/call/kick/2
+GET http://localhost:8083/cache/v2/call/kick/2
