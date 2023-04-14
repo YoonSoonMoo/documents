@@ -1,5 +1,6 @@
 package kr.pe.yoonsm.ehcache.service;
 
+import kr.pe.yoonsm.ehcache.config.CacheEventFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,6 @@ public class CacheReplicationService {
     final CallMappingEventHandler callMappingEventHandler;
 
     final ApplicationEventPublisher applicationEventPublisher;
-
 
     /**
      * key = "#callMappingDto.seq" 동작하지 않아 cacheManager로 별도 구현
@@ -65,6 +65,7 @@ public class CacheReplicationService {
 
     public void clearCache(String seq) {
         cacheManager.getCache(CACHE_NAME).evict(seq);
+
         log.info("EhCache all clear!!!!!");
     }
 
