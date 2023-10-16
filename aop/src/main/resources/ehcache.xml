@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns='http://www.ehcache.org/v3'>
-
     <cache alias="findUserHistoryCache">
         <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
         <value-type>java.util.List</value-type>
+<!--
         <bootstrapCacheLoaderFactory
                 class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
                 properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"/>
         <cacheEventListenerFactory
                 class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+-->
         <expiry>
             <ttl unit="seconds">60</ttl>
         </expiry>
@@ -25,7 +26,5 @@
         <resources>
             <offheap unit="MB">10</offheap>
         </resources>
-
     </cache>
-
 </config>
