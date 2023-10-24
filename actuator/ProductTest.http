@@ -1,0 +1,28 @@
+### [actuator test] 어플리케이션를 셧다운 한다.
+POST http://localhost:8080/actuator/shutdown
+Content-Type: application/json
+
+### [actuator test] OS 및 Java의 추가정보를 취득한다.
+GET http://localhost:8080/actuator/info
+
+### [actuator test] 새로운 상품을 등록한다.
+POST http://localhost:8080/orders/addProduct
+Content-Type: application/json
+
+{
+  "productCode" :  "a00001",
+  "quantity" : 10,
+  "price" : 23000,
+  "productName": "순무 신발"
+}
+
+### [actuator test] 주문의 내용을 갱신한다.
+POST http://localhost:8080/orders/updateProduct
+Content-Type: application/json
+
+{
+  "productCode" :  "a00001",
+  "quantity" : 5,
+  "price" : 23000,
+  "productName": "순무 양말"
+}
