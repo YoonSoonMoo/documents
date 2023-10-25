@@ -4,7 +4,14 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/actuator" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/actuator" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/aop" />
         <option name="modules">
           <set>
@@ -13,7 +20,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ehcacheReplica" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ehcacheReplica" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/webClient" />
         <option name="modules">
           <set>
@@ -22,7 +36,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/websocket" />
         <option name="modules">
           <set>

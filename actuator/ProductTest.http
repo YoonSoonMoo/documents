@@ -10,7 +10,7 @@ POST http://localhost:8080/orders/addProduct
 Content-Type: application/json
 
 {
-  "productCode" :  "a00001",
+  "id" :  "a00001",
   "quantity" : 10,
   "price" : 23000,
   "productName": "순무 신발"
@@ -21,7 +21,7 @@ POST http://localhost:8080/orders/updateProduct
 Content-Type: application/json
 
 {
-  "productCode" :  "a00001",
+  "id" :  "a00001",
   "quantity" : 5,
   "price" : 23000,
   "productName": "순무 양말"

@@ -1,21 +1,18 @@
 package kr.pe.yoonsm.actuator.repository.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import lombok.Getter;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
-@Entity
+@RedisHash(value = "product")
 @Getter
 public class Product {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    private String productCode;
+    private String id;
+    @Indexed
     private String productName;
     int quantity;
     int price;
-
-    public Long getId() {
-        return id;
-    }
 }

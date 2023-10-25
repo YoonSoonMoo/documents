@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class ProductService {
@@ -30,7 +28,7 @@ public class ProductService {
     public CommonResponse<String> updateProductProcess(ProductRequest productRequest) {
         CommonResponse commonResponse = new CommonResponse();
 
-        Product result = productRepository.findByProductCode(productRequest.getProductCode());
+        Product result = productRepository.findByProductId(productRequest.getId());
         if (result == null) {
             commonResponse.setResult("900");
         } else {

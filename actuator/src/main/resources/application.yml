@@ -16,13 +16,8 @@ logging:
     kr.pe.yoonsm.actuator: debug
 
 spring:
-  data:
+  cache:
     redis:
       host: localhost
       port: 6379
-  jpa:
-    properties:
-      hibernate:
-        cache:
-          use_second_level_cache: true
-          use_query_cache: true
+      time-to-live: 3600

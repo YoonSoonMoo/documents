@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/actuator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/actuator.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/aop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/aop.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/documents.iml" filepath="$PROJECT_DIR$/.idea/documents.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ehcacheReplica.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ehcacheReplica.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.ehcache.ehcacheReplica.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.ehcache.ehcacheReplica.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.history.aop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.history.aop.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.webClient.webClient.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.webClient.webClient.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.webClient.webClient.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.webClient.webClient.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.websocket.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.websocket.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.websocket.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.pe.yoonsm.websocket.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webClient.main.iml" filepath="$PROJECT_DIR$/.idea/modules/webClient.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webClient.test.iml" filepath="$PROJECT_DIR$/.idea/modules/webClient.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/websocket.main.iml" filepath="$PROJECT_DIR$/.idea/modules/websocket.main.iml" />
