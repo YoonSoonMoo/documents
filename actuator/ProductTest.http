@@ -26,3 +26,6 @@ Content-Type: application/json
   "price" : 23000,
   "productName": "순무 양말"
 }
+
+### [actuator test] 상품을 검색한다.
+GET http://localhost:8080/orders/products/a00001

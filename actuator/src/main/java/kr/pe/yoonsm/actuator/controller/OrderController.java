@@ -24,7 +24,13 @@ public class OrderController {
     @PostMapping("/updateProduct")
     public CommonResponse updateProduct(@RequestBody ProductRequest productRequest){
         log.debug("주문내용 갱신" + productRequest.toString());
-        return productService.addProductProcess(productRequest);
+        return productService.updateProductProcess(productRequest);
+    }
+
+    @GetMapping("/products/{id}")
+    public CommonResponse findProduct(@PathVariable String id){
+        log.debug("상품 검색 : {}",id);
+        return productService.findProductById(id);
     }
 
 }
