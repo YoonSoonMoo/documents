@@ -143,3 +143,52 @@ implementation 'io.micrometer:micrometer-registry-prometheus'
 연동이 잘 되었다면 아래의 URL로 프로메테우스 설정을 확인 할 수 있다.
 > http://localhost:9090/config  
 > http://localhost:9090/targets
+
+
+레디스 (DataRedis CrudRepository 사용시) Redis의 동작
+
+```javascript
+D:\tools\Redis-x64-5.0.14.1>redis-cli.exe monitor
+OK
+1698658337.356791 [0 127.0.0.1:55597] "PING"
+1698658337.368867 [0 127.0.0.1:55597] "INFO"
+
+-- 1개의 상품을 등록할때 (product:a00001)
+1698658350.671327 [0 127.0.0.1:55597] "DEL" "product:a00001"
+1698658350.673215 [0 127.0.0.1:55597] "HMSET" "product:a00001" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00001" "price" "23000" 
+"productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "quantity" "10"
+1698658350.675562 [0 127.0.0.1:55597] "SMEMBERS" "product:a00001:idx"
+1698658350.676839 [0 127.0.0.1:55597] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+1698658350.677944 [0 127.0.0.1:55597] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00001"
+1698658350.678453 [0 127.0.0.1:55597] "DEL" "product:a00001:idx"
+1698658350.679299 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00001"
+1698658350.679902 [0 127.0.0.1:55597] "SADD" "product:a00001:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+
+-- 1개의 상품을 등록할때 (product:a00002)
+1698658367.005991 [0 127.0.0.1:55597] "DEL" "product:a00002"
+1698658367.006882 [0 127.0.0.1:55597] "HMSET" "product:a00002" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00002" "price" "33000" 
+"productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "quantity" "5"
+1698658367.007484 [0 127.0.0.1:55597] "SMEMBERS" "product:a00002:idx"
+1698658367.008037 [0 127.0.0.1:55597] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+1698658367.008535 [0 127.0.0.1:55597] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00002"
+1698658367.008989 [0 127.0.0.1:55597] "DEL" "product:a00002:idx"
+1698658367.009504 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00002"
+1698658367.009976 [0 127.0.0.1:55597] "SADD" "product:a00002:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+
+-- 1개의 상품을 등록할때 (product:a00003)
+1698658934.441896 [0 127.0.0.1:55597] "DEL" "product:a00003"
+1698658934.443138 [0 127.0.0.1:55597] "HMSET" "product:a00003" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00003" "price" "2000" 
+"productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "quantity" "2"
+1698658934.443601 [0 127.0.0.1:55597] "SMEMBERS" "product:a00003:idx"
+1698658934.444115 [0 127.0.0.1:55597] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90"
+1698658934.444660 [0 127.0.0.1:55597] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "a00003"
+1698658934.445287 [0 127.0.0.1:55597] "DEL" "product:a00003:idx"
+1698658934.445840 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "a00003"
+1698658934.446550 [0 127.0.0.1:55597] "SADD" "product:a00003:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90"
+```
+
+
+
+
+출처 :
+https://hyperconnect.github.io/2022/12/12/fix-increasing-memory-usage.html
