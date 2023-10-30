@@ -5,9 +5,9 @@ import kr.pe.yoonsm.actuator.controller.vo.ProductRequest;
 import kr.pe.yoonsm.actuator.repository.ProductRepository;
 import kr.pe.yoonsm.actuator.repository.entity.Product;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +55,6 @@ public class ProductService {
 
     public CommonResponse<Product> findProductById(String id) {
         CommonResponse commonResponse = new CommonResponse();
-        //Optional<Product> product = productRepository.findById(makeProductRedisKey(id));
         Optional<Product> product = productRepository.findById(id);
 
         if (product.isEmpty()) {
@@ -67,4 +66,16 @@ public class ProductService {
         return commonResponse;
     }
 
+    public CommonResponse<List<Product>> findProductByProductName(String productName) {
+        CommonResponse commonResponse = new CommonResponse();
+        Optional<List<Product>> productList = productRepository.findByProductName(productName);
+
+        if (productList.isEmpty()) {
+            commonResponse.setResult("901");
+        } else {
+            commonResponse.setResult("200");
+            commonResponse.setData(productList.get());
+        }
+        return commonResponse;
+    }
 }

@@ -13,7 +13,29 @@ Content-Type: application/json
   "id" :  "a00001",
   "quantity" : 10,
   "price" : 23000,
-  "productName": "순무 신발"
+  "productName": "순무신발"
+}
+
+### [actuator test] 새로운 상품을 등록한다.
+POST http://localhost:8080/orders/addProduct
+Content-Type: application/json
+
+{
+  "id" :  "a00002",
+  "quantity" : 5,
+  "price" : 33000,
+  "productName": "순무신발"
+}
+
+### [actuator test] 새로운 상품을 등록한다.
+POST http://localhost:8080/orders/addProduct
+Content-Type: application/json
+
+{
+  "id" :  "a00003",
+  "quantity" : 2,
+  "price" : 2000,
+  "productName": "순무양말"
 }
 
 ### [actuator test] 주문의 내용을 갱신한다.
@@ -24,8 +46,11 @@ Content-Type: application/json
   "id" :  "a00001",
   "quantity" : 5,
   "price" : 23000,
-  "productName": "순무 양말"
+  "productName": "순무신발2"
 }
 
 ### [actuator test] 상품을 검색한다.
 GET http://localhost:8080/orders/products/a00001
+
+### [actuator test] 상품명을 검색한다.
+GET http://localhost:8080/orders/products/name/순무신발

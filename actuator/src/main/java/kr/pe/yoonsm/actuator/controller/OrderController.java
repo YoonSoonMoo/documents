@@ -33,4 +33,11 @@ public class OrderController {
         return productService.findProductById(id);
     }
 
+    @GetMapping("/products/name/{productName}")
+    public CommonResponse findProductByName(@PathVariable String productName){
+        log.debug("상품명 검색 : {}",productName);
+        return productService.findProductByProductName(productName);
+    }
+
+
 }

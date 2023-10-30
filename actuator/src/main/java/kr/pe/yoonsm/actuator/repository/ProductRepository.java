@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ProductRepository extends CrudRepository<Product, String> {
 
     Optional<List<Product>> findByProductName(String productName);
+
 }
