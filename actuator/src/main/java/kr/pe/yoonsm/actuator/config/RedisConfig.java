@@ -1,5 +1,6 @@
 package kr.pe.yoonsm.actuator.config;
 
+import kr.pe.yoonsm.actuator.repository.entity.Product;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,9 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Getter
@@ -34,11 +38,21 @@ public class RedisConfig {
     /**
      * RedisConnection에서 넘겨준 byte 값 객체 직렬화
      */
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+    @Bean("redisTemplate")
+    public RedisTemplate<String,Product> redisTemplate() {
+        RedisTemplate<String,Product> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Product.class));
         return redisTemplate;
     }
+
+    @Bean("redisIndexTemplate")
+    public RedisTemplate<String, String> redisIndexTemplate() {
+        RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+        return redisTemplate;
+    }
+
 }

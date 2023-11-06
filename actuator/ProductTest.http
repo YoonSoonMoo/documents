@@ -6,7 +6,7 @@ Content-Type: application/json
 GET http://localhost:8080/actuator/info
 
 ### [actuator test] 새로운 상품을 등록한다.
-POST http://localhost:8080/orders/addProduct
+POST http://localhost:8080/v1/orders/addProduct
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### [actuator test] 새로운 상품을 등록한다.
-POST http://localhost:8080/orders/addProduct
+POST http://localhost:8080/v1/orders/addProduct
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### [actuator test] 새로운 상품을 등록한다.
-POST http://localhost:8080/orders/addProduct
+POST http://localhost:8080/v1/orders/addProduct
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### [actuator test] 주문의 내용을 갱신한다.
-POST http://localhost:8080/orders/updateProduct
+POST http://localhost:8080/v1/orders/updateProduct
 Content-Type: application/json
 
 {
@@ -50,7 +50,37 @@ Content-Type: application/json
 }
 
 ### [actuator test] 상품을 검색한다.
-GET http://localhost:8080/orders/products/a00001
+GET http://localhost:8080/v1/orders/products/a00001
 
 ### [actuator test] 상품명을 검색한다.
-GET http://localhost:8080/orders/products/name/순무신발
+GET http://localhost:8080/v1/orders/products/name/순무신발
+
+
+### [actuator Redis template test] 손 장갑을 등록한다.
+POST http://localhost:8080/v2/orders/addProduct
+Content-Type: application/json
+
+{
+  "id" :  "b00001",
+  "quantity" : 5,
+  "price" : 13000,
+  "productName": "순무장갑"
+}
+
+### [actuator Redis template test] 손 장갑을 등록한다.
+POST http://localhost:8080/v2/orders/addProduct
+Content-Type: application/json
+
+{
+  "id" :  "b00002",
+  "quantity" : 3,
+  "price" : 1000,
+  "productName": "순무장갑"
+}
+
+###[actuator Redis template test] 손 장갑을 ID로 검색한다.
+GET http://localhost:8080/v2/orders/products/b00001
+
+
+###[actuator Redis template test] 손 장갑을 이름으로 검색한다.
+GET http://localhost:8080/v2/orders/products/name/순무장갑

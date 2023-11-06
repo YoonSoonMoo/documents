@@ -164,28 +164,65 @@ OK
 1698658350.679299 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00001"
 1698658350.679902 [0 127.0.0.1:55597] "SADD" "product:a00001:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
 
--- 1개의 상품을 등록할때 (product:a00002)
-1698658367.005991 [0 127.0.0.1:55597] "DEL" "product:a00002"
-1698658367.006882 [0 127.0.0.1:55597] "HMSET" "product:a00002" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00002" "price" "33000" 
-"productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "quantity" "5"
-1698658367.007484 [0 127.0.0.1:55597] "SMEMBERS" "product:a00002:idx"
-1698658367.008037 [0 127.0.0.1:55597] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
-1698658367.008535 [0 127.0.0.1:55597] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00002"
-1698658367.008989 [0 127.0.0.1:55597] "DEL" "product:a00002:idx"
-1698658367.009504 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00002"
-1698658367.009976 [0 127.0.0.1:55597] "SADD" "product:a00002:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+-- 1개의 상품을 갱신할때 (product:a00001)
+1698828560.396978 [0 127.0.0.1:58942] "HGETALL" "product:a00001"
+ product:a00001 키로 지정된 value를 취득한다.
+1698828560.416124 [0 127.0.0.1:58942] "DEL" "product:a00001"
+ 찾은 키의 정보를 삭제한다.
+1698828560.418374 [0 127.0.0.1:58942] "HMSET" "product:a00001" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00001" "price" "23000" "productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c2" "quantity" "5"
+ 삭제한 키에 새로운 멀티 필드값을 적재한다.
+1698828560.420651 [0 127.0.0.1:58942] "SMEMBERS" "product:a00001:idx"
+ 해당 키를 smembers에 등록한다.
+1698828560.421785 [0 127.0.0.1:58942] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+ 상품이름으로 인덱싱을 했으므로 타입을 검색한다.
+1698828560.423299 [0 127.0.0.1:58942] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c" "a00001"
+ 인덱싱 (smembers)에서 해당 값을 삭제한다. a00001
+1698828560.423859 [0 127.0.0.1:58942] "DEL" "product:a00001:idx"
+ 키 인덱싱 값을 삭제한다.
+1698828560.424804 [0 127.0.0.1:58942] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c2" "a00001"
+ 인덱싱 (smembers)에 a00001를 추가 (키는 상품이름)
+1698828560.425527 [0 127.0.0.1:58942] "SADD" "product:a00001:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c2"
+ 인덱싱 (smembers)에 상품이름을 추가한다. (키는 상품코드)
 
--- 1개의 상품을 등록할때 (product:a00003)
-1698658934.441896 [0 127.0.0.1:55597] "DEL" "product:a00003"
-1698658934.443138 [0 127.0.0.1:55597] "HMSET" "product:a00003" "_class" "kr.pe.yoonsm.actuator.repository.entity.Product" "id" "a00003" "price" "2000" 
-"productName" "\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "quantity" "2"
-1698658934.443601 [0 127.0.0.1:55597] "SMEMBERS" "product:a00003:idx"
-1698658934.444115 [0 127.0.0.1:55597] "TYPE" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90"
-1698658934.444660 [0 127.0.0.1:55597] "SREM" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "a00003"
-1698658934.445287 [0 127.0.0.1:55597] "DEL" "product:a00003:idx"
-1698658934.445840 [0 127.0.0.1:55597] "SADD" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90" "a00003"
-1698658934.446550 [0 127.0.0.1:55597] "SADD" "product:a00003:idx" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x96\x91\xeb\xa7\x90"
+-- 상품 이름으로 검색할때
+1698827995.470290 [0 127.0.0.1:58742] "SINTER" "product:productName:\xec\x88\x9c\xeb\xac\xb4\xec\x8b\xa0\xeb\xb0\x9c"
+ 입력값을 가지는 중복된 값을 취득한다.
+1698827995.471589 [0 127.0.0.1:58742] "HGETALL" "product:a00002"
+ 추출된 키정보로 값을 취득한다.
+1698827995.472317 [0 127.0.0.1:58742] "HGETALL" "product:a00001"
+
 ```
+
+
+비지네스 용도의 metrics를 class method 단위로 등록해서 사용한다.  
+AOP 방식을 지원하므로 간단하게 등록해서 사용해 보자
+metrics를 관리자에 Counted (카운트용 Aspect ) 를 아래와 같이 등록한다.
+```java
+    @Bean
+    public CountedAspect countedAspect(MeterRegistry meterRegistry) {
+        return new CountedAspect(meterRegistry);
+    }
+```
+
+적용 대상 class에 `counted` 를 적용해 보자
+```java
+    @Counted("my.product")
+    public CommonResponse<String> addProductProcess(ProductRequest productRequest) {
+        CommonResponse commonResponse = new CommonResponse();
+        Product product = Product.builder()
+                .id(productRequest.getId())
+                .productName(productRequest.getProductName())
+                .price(productRequest.getPrice())
+                .quantity(productRequest.getQuantity()).build();
+        productRepository.save(product);
+
+        commonResponse.setResult("200");
+        commonResponse.setData(product.getProductName());
+        return commonResponse;
+    }
+```
+my.product -> my_product_total 의 키가 생성되며 위의 method를 호출할 경우  
+아래와 같은 metric을 확인할 수 있다.
 
 
 
