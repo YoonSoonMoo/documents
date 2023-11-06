@@ -1,9 +1,7 @@
 package kr.pe.yoonsm.actuator.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.common.util.StringUtils;
 import io.micrometer.core.annotation.Counted;
-import jakarta.annotation.Resource;
 import kr.pe.yoonsm.actuator.controller.vo.CommonResponse;
 import kr.pe.yoonsm.actuator.controller.vo.ProductRequest;
 import kr.pe.yoonsm.actuator.repository.entity.Product;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,11 +24,11 @@ public class ProductRedisTempService {
 
     // 상품용
     @Autowired
-    RedisTemplate<String,Product> redisTemplate;
+    RedisTemplate<String, Product> redisTemplate;
 
     // 인덱스용 ( smembers )
     @Qualifier("redisIndexTemplate")
-    RedisTemplate<String,String> redisIndexTemplate;
+    RedisTemplate<String, String> redisIndexTemplate;
 
     final ObjectMapper objectMapper;
 
@@ -50,14 +47,8 @@ public class ProductRedisTempService {
                 .price(productRequest.getPrice())
                 .quantity(productRequest.getQuantity()).build();
 
-        redisTemplate.delete(productRequest.getId());
-        ValueOperations<String,Product> valueOperations = redisTemplate.opsForValue();
         SetOperations<String, String> productIndex = redisIndexTemplate.opsForSet();
-
-        valueOperations.set(productRequest.getId(), product);
-        // 인덱스에 있는 내용을 삭제한다.
-        //productIndex.remove("PRODUCT_NAME:"+productRequest.getProductName(),productRequest.getId());
-
+        redisTemplate.opsForValue().set(productRequest.getId(), product);
         // 상품명으로 ID를 찾는 인덱스 추가
         productIndex.add("PRODUCT_NAME:" + productRequest.getProductName(), productRequest.getId());
         // ID로 를 찾는 인덱스 추가
@@ -72,9 +63,8 @@ public class ProductRedisTempService {
     public CommonResponse<String> updateProductProcess(ProductRequest productRequest) {
         CommonResponse commonResponse = new CommonResponse();
 
-        ValueOperations<String,Product> valueOperations = redisTemplate.opsForValue();
         SetOperations<String, String> productIndex = redisIndexTemplate.opsForSet();
-        Product result = (Product) valueOperations.get(productRequest.getId());
+        Product result = redisTemplate.opsForValue().get(productRequest.getId());
 
         if (result == null) {
             commonResponse.setResult("900");
@@ -86,7 +76,7 @@ public class ProductRedisTempService {
                     .price(productRequest.getPrice())
                     .quantity(productRequest.getQuantity())
                     .build();
-            valueOperations.set(productRequest.getId(), product);
+            redisTemplate.opsForValue().set(productRequest.getId(), product);
 
             // 기존의 인덱스는 삭제한다.
             productIndex.remove("PRODUCT_NAME:" + result.getProductName(), productRequest.getId());
@@ -105,9 +95,6 @@ public class ProductRedisTempService {
     @Counted("my.redisTemp.product")
     public CommonResponse<Product> findProductById(String id) {
         CommonResponse commonResponse = new CommonResponse();
-
-        //ValueOperations<String,Product> valueOperations = redisTemplate.opsForValue();
-        //Product result = valueOperations.get(id);
         Product result = redisTemplate.opsForValue().get(id);
 
         if (result == null) {
@@ -123,16 +110,10 @@ public class ProductRedisTempService {
     public CommonResponse<List<Product>> findProductByProductName(String productName) {
         CommonResponse commonResponse = new CommonResponse();
         List<Product> returnList = new ArrayList<>();
-        ValueOperations<String,Product> valueOperations = redisTemplate.opsForValue();
-        SetOperations<String, String> productIndex = redisIndexTemplate.opsForSet();
-
-        Set<String> resultList = productIndex.members("PRODUCT_NAME:"+productName);
-        for(String key : resultList.stream().toList()){
-
-            log.debug("인덱스 검색된 키 : {}",key);
-
-            Product product = (Product) valueOperations.get(key);
-            returnList.add(product);
+        Set<String> resultList = redisIndexTemplate.opsForSet().members("PRODUCT_NAME:" + productName);
+        for (String key : resultList.stream().toList()) {
+            log.debug("인덱스 검색된 키 : {}", key);
+            returnList.add(redisTemplate.opsForValue().get(key));
         }
 
         if (resultList.isEmpty()) {
@@ -144,14 +125,4 @@ public class ProductRedisTempService {
         return commonResponse;
     }
 
-//    public <T> T getData(String key , Class<T> classType ) throws Exception{
-//        String jsonResult = redisTemplate.opsForValue().get(key);
-//        if(StringUtils.isBlank(jsonResult)){
-//            return null;
-//        } else{
-//            ObjectMapper mapper = new ObjectMapper();
-//            T obj = mapper.readValue(jsonResult,classType);
-//            return obj;
-//        }
-//    }
 }
