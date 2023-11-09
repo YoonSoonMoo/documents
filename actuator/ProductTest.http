@@ -78,6 +78,17 @@ Content-Type: application/json
   "productName": "순무장갑"
 }
 
+### [actuator Redis template test] 장갑명을 수정한다.
+POST http://localhost:8080/v2/orders/updateProduct
+Content-Type: application/json
+
+{
+  "id" :  "b00002",
+  "quantity" : 3,
+  "price" : 1000,
+  "productName": "빨강순무장갑"
+}
+
 ###[actuator Redis template test] 손 장갑을 ID로 검색한다.
 GET http://localhost:8080/v2/orders/products/b00001
 

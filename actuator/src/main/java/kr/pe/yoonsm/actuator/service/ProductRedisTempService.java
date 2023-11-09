@@ -62,8 +62,6 @@ public class ProductRedisTempService {
     @Counted("my.redisTemp.product")
     public CommonResponse<String> updateProductProcess(ProductRequest productRequest) {
         CommonResponse commonResponse = new CommonResponse();
-
-        SetOperations<String, String> productIndex = redisIndexTemplate.opsForSet();
         Product result = redisTemplate.opsForValue().get(productRequest.getId());
 
         if (result == null) {
@@ -79,13 +77,14 @@ public class ProductRedisTempService {
             redisTemplate.opsForValue().set(productRequest.getId(), product);
 
             // 기존의 인덱스는 삭제한다.
-            productIndex.remove("PRODUCT_NAME:" + result.getProductName(), productRequest.getId());
-            productIndex.remove("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
+            redisIndexTemplate.opsForSet().remove("PRODUCT_NAME:" + result.getProductName(), productRequest.getId());
+            redisIndexTemplate.opsForSet().remove("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
+
 
             // 상품명으로 ID를 찾는 인덱스 추가
-            productIndex.add("PRODUCT_NAME:" + productRequest.getProductName(), productRequest.getId());
+            redisIndexTemplate.opsForSet().add("PRODUCT_NAME:" + productRequest.getProductName(), productRequest.getId());
             // ID로 를 찾는 인덱스 추가
-            productIndex.add("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
+            redisIndexTemplate.opsForSet().add("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
 
             commonResponse.setResult("200");
         }
@@ -110,7 +109,11 @@ public class ProductRedisTempService {
     public CommonResponse<List<Product>> findProductByProductName(String productName) {
         CommonResponse commonResponse = new CommonResponse();
         List<Product> returnList = new ArrayList<>();
+
+        // smember 에서 인덱싱된 상품명을 검색한다.
         Set<String> resultList = redisIndexTemplate.opsForSet().members("PRODUCT_NAME:" + productName);
+
+        // 추출된 키로 실 데이타를 검색한다.
         for (String key : resultList.stream().toList()) {
             log.debug("인덱스 검색된 키 : {}", key);
             returnList.add(redisTemplate.opsForValue().get(key));
