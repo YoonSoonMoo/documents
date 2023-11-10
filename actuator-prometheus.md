@@ -1,13 +1,14 @@
 # actuator - prometheus
-![](https://img.shields.io/badge/spring%20boot-3.1.4.RELEASE-brightgreen) ![](https://img.shields.io/badge/Gradle-8.3-red)  ![](https://img.shields.io/badge/actuator-3.1.4-blue)  
+![](https://img.shields.io/badge/spring%20boot-3.1.4.RELEASE-brightgreen) ![](https://img.shields.io/badge/Gradle-8.3-red)  ![](https://img.shields.io/badge/actuator-3.1.4-blue) ![](https://img.shields.io/badge/redis-5.0.14-orange)  
 powered by [Java]  platform development team present ⓒ2023 DAOU Tech., INC. All rights reserved.
 
 ### actuator 도입 이유
 
-`전투에서 실패한 지휘관은 용서할 수 있지만 경계에서 실패하는 지휘관은 용서할 수 없다`  라는 말이 있다.
-이 말을 서비스를 운영하는 개발자에게 맞추어 보면 장애는 언제든지 발생할 수 있다. 하지만 모니터링(경계)은 잘 대응하는 것이 중요하다는 의미이다.
+`전투에서 실패한 지휘관은 용서할 수 있지만 경계에서 실패하는 지휘관은 용서할 수 없다`  라는 말이 있다.  
+이 말을 서비스를 운영하는 개발자에게 맞추어 보면 장애는 언제든지 발생할 수 있다.  
+하지만 모니터링(경계)은 잘 대응하는 것이 중요하다는 의미이다.
 장애가 발생했을 경우 가장 중요시 여기는 것이 무엇인가?  
-사업팀 입장이라면 매출에 대한 영향 일것이고 개발팀 입장에서는 얼마나 빠르게 인지했느냐 일 것이다.
+사업팀 입장이라면 매출에 대한 영향이고 개발팀 입장에서는 얼마나 빠르게 인지하고 대응했느냐 일 것이다.
 
 개발팀의 입장에서 고려해 본다면  우리가 지켜봐야 하는 내용에는 어떤 것들이 있을까?  
 개인적으로는 지표(metric) , 추적(trace) 라고 생각한다.  
@@ -15,17 +16,33 @@ powered by [Java]  platform development team present ⓒ2023 DAOU Tech., INC. Al
 서비스 오픈 이후에도 개선 작업을 지속하는 이유이다.  
 
 `actuator`는 이전부터 어느 정도 인지하고 있는 기술이었으나 실제 운영 환경에 적용하는 것을 고려하지 않았다.  
-그 이유는 서비스 api 에 함께 실려지는 부분으로 보안상의 리스크와 ( 실제 actuator에는 서비스를 원격으로 내리는 기능도 있음 )  
-지표 , 추적기능을 `스카우터`가 대체 할 수 있었기 때문이었다.  
+그 이유는 서비스 적용할 경우 보안상의 리스크와 ( 실제 actuator에는 서비스를 원격으로 내리는 기능도 있음 )  
+지표 , 추적 기능을 `스카우터`가 대체 할 수 있었기 때문이었다.  
 하지만 스카우터에서 지원되지 않는 기능이 있었으니 그것은 바로 비지니스 매트릭이다.  
-비즈니스 매트릭이란 이전 우리가 개발/운영 했던 배달대행 서비스에서 예를 들면 활성화 된 지점의 액티브 
- 라이더의 수, 온라인 매장 수를 예로 들수 있겠다.
+비즈니스 매트릭이란 이전 우리가 개발/운영 했던 배달대행 서비스에서 예를 들면 활성화 된 지점의 액티브 라이더의 수  
+온라인 매장 수를 예로 들수 있겠다.  
 시스템 매트릭 (CPU , 메모리) , 애플리케이션 매트릭( 톰켓 쓰레드풀 , 커넥션풀 수 등 ) 에서 문제가   
 확인되지 않으나 특정 지점의 라이더와 온라인 매장이 0 이라면 무언가 문제가 있는것 아닐까?  
 이런 비지니스 매트릭을 확인하기 위해 나는 프로메테우스와 그라파나를 활용했다.  
 비즈니스 매트릭의 장점으로는 개발자 뿐만이 아닌 사업팀에서도 유의미한 정보가 된다는 것이다.
 
-#### 프로젝트 구성
+### 무엇을 검증 해볼까?
+
+`actuator` 를 이용한 비즈네스 메트릭 검증을 검토해 보자
+상품을 등록,수정,검색하는 API 대상으로 호출된 카운트 (상품 등록수 , 검색 검수 등)를   
+비즈니스 매트릭으로 정의하고 그 결과를 확인해 보자.  
+추가적으로 Redis 사용에 있어 DataRedis 그리고 RedisTemplate 사용에 대한 성능 검증 (프로메테우스 사용)도 병행해 보자.
+
+- gradle 구성 및 필요 라이브러리 소개
+- `actuator`의 확인
+- `actuator`의 설정
+- 어플리케이션 관련 메트릭에 대한 소개
+- 프로메테우스 설치 및 설명
+- DataRedis 사용 검증
+- RedisTemplate 사용 검증
+- 
+
+### 프로젝트 구성
 
 필요한 라이브러리는 아래와 같습니다.  
 `build.gradle`
@@ -146,6 +163,32 @@ implementation 'io.micrometer:micrometer-registry-prometheus'
 
 
 레디스 (DataRedis CrudRepository 사용시) Redis의 동작
+DataRedis의 구현체는 매우 간단하다.
+상품명을 찾는 method만 추가 했으며 JPA 와 동일하게 검색조건을 정의한다. 
+
+```java
+@Repository
+public interface ProductRepository extends CrudRepository<Product, String> {
+    Optional<List<Product>> findByProductName(String productName);
+}
+```
+
+아래는 ProductRepository를 사용하여 상품을 등록 또는 검색하는 코드 이다.  
+상품의 갱신 또한 등록과 비슷하다.
+```java
+    // 상품 Entity를 생성
+    Product product = Product.builder()
+        .id(productRequest.getId())
+        .productName(productRequest.getProductName())
+        .price(productRequest.getPrice())
+        .quantity(productRequest.getQuantity()).build();
+    // 상품을 Redis로 등록
+    productRepository.save(product);
+
+    // 상품명으로 검색
+    Optional<List<Product>> productList = productRepository.findByProductName(productName);
+```
+상품의 등록 / 수정 / 검색을 ProductRepository를 사용하여 구현했을 경우 Redis에 발행된 명령어는 아래와 같다.
 
 ```javascript
 D:\tools\Redis-x64-5.0.14.1>redis-cli.exe monitor
@@ -193,10 +236,72 @@ OK
 
 ```
 
+레디스 (RedisTemplate 사용시) 
 
-비지네스 용도의 metrics를 class method 단위로 등록해서 사용한다.  
+DataRedis와 달리 redisTemplate 를 사용할 경우 모든 내용을 구현해 줘야 한다.  
+주요한 내용으로는 상품명을 검색조건으로 지정하기 때문에 smember(index) 를 사용하며  
+key : 상품명 , 상품코드 : value로 값을 저장한다.  
+물론 값이 추가 되거나 갱신될 경우 smembers도 함께 처리를 해줘야 한다.
+
+아래는 상품정보가 갱신될 때 smember의 내용을 갱신하는 내용  
+삭제 후 다시 추가
+```java
+      // 기존의 인덱스는 삭제한다.
+      redisIndexTemplate.opsForSet().remove("PRODUCT_NAME:" + result.getProductName(), productRequest.getId());
+      redisIndexTemplate.opsForSet().remove("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
+
+      // 상품명으로 ID를 찾는 인덱스 추가
+      redisIndexTemplate.opsForSet().add("PRODUCT_NAME:" + productRequest.getProductName(), productRequest.getId());
+      // ID로 를 찾는 인덱스 추가
+      redisIndexTemplate.opsForSet().add("PRODUCT_ID:" + productRequest.getId(), productRequest.getProductName());
+
+```
+
+아래는 smember를 기준으로 상품값을 가져오는 케이스 
+```java
+        // smember 에서 인덱싱된 상품명을 검색한다.
+        Set<String> resultList = redisIndexTemplate.opsForSet().members("PRODUCT_NAME:" + productName);
+
+        // 추출된 키로 실 데이타를 검색한다.
+        for (String key : resultList.stream().toList()) {
+            log.debug("인덱스 검색된 키 : {}", key);
+            returnList.add(redisTemplate.opsForValue().get(key));
+        }
+
+```
+
+같은 요건을 redisTemplate로 구현했을 경우 Redis에 발행되는 명령어를 확인해 보면 아래와 같다.
+상품을 등록하고 , 수정하고 , 검색하는 api를 호출한 경우 Redis에 발행된 명령어
+
+```javascript
+-- [상품을 등록]
+1699434149.692686 [0 127.0.0.1:63249] "SET" "b00002" "{\"id\":\"b00002\",\"product_name\":\"\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91\",\"quantity\":3,\"price\":1000}"
+-- 상품명을 인덱스(smember)에 등록
+1699434149.694739 [0 127.0.0.1:63249] "SADD" "PRODUCT_NAME:\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91" "b00002"
+1699434149.695520 [0 127.0.0.1:63249] "SADD" "PRODUCT_ID:b00002" "\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91"
+
+-- [상품 갱신]
+-- 키정보로 Redis에서 값을 취한다.
+1699434660.458428 [0 127.0.0.1:63249] "GET" "b00002"
+-- 수정한 값을 저장한다.
+1699434660.461310 [0 127.0.0.1:63249] "SET" "b00002" "{\"id\":\"b00002\",\"product_name\":\"\xeb\xb9\xb5\xea\xb0\x95\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91\",\"quantity\":3,\"price\":1000}"
+-- 상품명 인덱스와 상품아이디 인덱스를 삭제한다.
+1699434660.462470 [0 127.0.0.1:63249] "SREM" "PRODUCT_NAME:\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91" "b00002"
+1699434660.463148 [0 127.0.0.1:63249] "SREM" "PRODUCT_ID:b00002" "\xeb\xb9\xb5\xea\xb0\x95\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91"
+-- 상품명 인덱스와 상품아이디 인덱스를 추가한다.
+1699434660.463759 [0 127.0.0.1:63249] "SADD" "PRODUCT_NAME:\xeb\xb9\xb5\xea\xb0\x95\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91" "b00002"
+1699434660.464312 [0 127.0.0.1:63249] "SADD" "PRODUCT_ID:b00002" "\xeb\xb9\xb5\xea\xb0\x95\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91"
+
+-- [상품 검색]
+-- 인덱스에서 상품명을 취득한다 (set)
+1699434817.290931 [0 127.0.0.1:63249] "SMEMBERS" "PRODUCT_NAME:\xec\x88\x9c\xeb\xac\xb4\xec\x9e\xa5\xea\xb0\x91"
+-- 취득한 키만큼 값을 취한다.
+1699434817.293564 [0 127.0.0.1:63249] "GET" "b00001"
+```
+
+비지니스 용도의 metrics를 class method 단위로 등록해서 사용한다.  
 AOP 방식을 지원하므로 간단하게 등록해서 사용해 보자
-metrics를 관리자에 Counted (카운트용 Aspect ) 를 아래와 같이 등록한다.
+metrics를 관리자에 Counted (카운트용 Aspect) 를 아래와 같이 등록한다.
 ```java
     @Bean
     public CountedAspect countedAspect(MeterRegistry meterRegistry) {
@@ -206,7 +311,7 @@ metrics를 관리자에 Counted (카운트용 Aspect ) 를 아래와 같이 등�
 
 적용 대상 class에 `counted` 를 적용해 보자
 ```java
-    @Counted("my.product")
+    @Counted("my.redisTemp.product")
     public CommonResponse<String> addProductProcess(ProductRequest productRequest) {
         CommonResponse commonResponse = new CommonResponse();
         Product product = Product.builder()
@@ -221,11 +326,13 @@ metrics를 관리자에 Counted (카운트용 Aspect ) 를 아래와 같이 등�
         return commonResponse;
     }
 ```
-my.product -> my_product_total 의 키가 생성되며 위의 method를 호출할 경우  
-아래와 같은 metric을 확인할 수 있다.
-
-
-
-
-출처 :
-https://hyperconnect.github.io/2022/12/12/fix-increasing-memory-usage.html
+my.redisTemp.product -> my_redisTemp_product_total 의 키가 생성되며 위의 method를 호출할 경우  
+아래와 같은 metric을 확인할 수 있다. (count metric)
+```javascript
+# HELP my_redisTemp_product_total  
+# TYPE my_redisTemp_product_total counter
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="addProductProcess",result="success",} 1.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductByProductName",result="success",} 2.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="updateProductProcess",result="success",} 1.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductById",result="success",} 7.0
+```
