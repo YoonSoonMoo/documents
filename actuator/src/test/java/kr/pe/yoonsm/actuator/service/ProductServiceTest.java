@@ -22,9 +22,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("RedisDataJPA를 사용하여 상품등록")
     public void productSaveV1_test() {
-
         // 10000등록 2분36초 소요
-
         int LOOP_COUNT = 10000;
         String url = "http://localhost:8080/v1/orders/addProduct";
         Random random = new Random();
@@ -39,7 +37,6 @@ class ProductServiceTest {
             productRequest.setProductName(inputData[index]);
             productRequest.setPrice(1200);
             productRequest.setQuantity(3);
-
             HttpEntity<ProductRequest> httpEntity = new HttpEntity<>(productRequest);
             ResponseEntity<String> response = restTemplate.exchange(
                     url,
@@ -60,7 +57,6 @@ class ProductServiceTest {
         Random random = new Random();
 
         // 10000등록 2분38초 소요
-
         // 100개의 데이터 생성
         for (int i = 0; i < LOOP_COUNT; i++) {
             // 랜덤으로 한 개의 데이터 선택
@@ -133,19 +129,23 @@ class ProductServiceTest {
     public void findProductByNameMultiV1_test() {
         // 1000건 검색에 2분 2초
         // 10건 검색에 1초 31
+        // 10건 검색에 1초 62
+        // 100건 검색에 11초 67
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             findProductByNameV1_test();
         }
     }
 
     @Test
-    @DisplayName("DataRedis 대량 상품명으로 검색")
+    @DisplayName("RedisTemplate 대량 상품명으로 검색")
     public void findProductByNameMultiV2_test() {
         // 1000건 검색 2분 4초
         // 10건 검색에 1초 29
+        // 10건 검색에 1초 43
+        // 100 검색에 11초 39
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             findProductbyNameV2_test();
         }
     }
