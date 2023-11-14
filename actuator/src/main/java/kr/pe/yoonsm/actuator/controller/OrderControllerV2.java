@@ -3,7 +3,6 @@ package kr.pe.yoonsm.actuator.controller;
 import kr.pe.yoonsm.actuator.controller.vo.CommonResponse;
 import kr.pe.yoonsm.actuator.controller.vo.ProductRequest;
 import kr.pe.yoonsm.actuator.service.ProductRedisTempService;
-import kr.pe.yoonsm.actuator.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +39,11 @@ public class OrderControllerV2 {
         return productService.findProductByProductName(productName);
     }
 
+
+    @GetMapping("/products/name/like/{productName}")
+    public CommonResponse findProductByNameLike(@PathVariable String productName){
+        log.debug("상품명 검색 Like : {}",productName);
+        return productService.findProductByProductNameLike(productName);
+    }
 
 }

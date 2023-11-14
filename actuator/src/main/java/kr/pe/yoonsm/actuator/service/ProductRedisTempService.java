@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
@@ -125,6 +127,35 @@ public class ProductRedisTempService {
             commonResponse.setResult("200");
             commonResponse.setData(returnList);
         }
+        return commonResponse;
+    }
+
+
+    public CommonResponse<List<Product>> findProductByProductNameLike(String productName) {
+
+        CommonResponse commonResponse = new CommonResponse();
+        List<Product> returnList = new ArrayList<>();
+
+        ScanOptions scanOptions = ScanOptions.scanOptions().match("*" + productName + "*").count(100).build();
+        // smember 에서 인덱싱된 상품명을 검색한다.
+        Cursor<String> keys = redisIndexTemplate.scan(scanOptions);
+
+        while (keys.hasNext()) {
+            Set<String> resultList = redisIndexTemplate.opsForSet().members(new String(keys.next()));
+            for (String key : resultList.stream().toList()) {
+                Product product = redisTemplate.opsForValue().get(key);
+                //log.debug("인덱스 검색된 키 : {} , 상품명 : {}", key , product.getProductName());
+                returnList.add(product);
+            }
+        }
+
+        if (returnList.isEmpty()) {
+            commonResponse.setResult("901");
+        } else {
+            commonResponse.setResult("200");
+            commonResponse.setData(returnList);
+        }
+
         return commonResponse;
     }
 

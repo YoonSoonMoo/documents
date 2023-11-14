@@ -33,7 +33,7 @@ class ProductServiceTest {
             int index = random.nextInt(inputData.length);
 
             ProductRequest productRequest = new ProductRequest();
-            productRequest.setId("a" + String.format("%04d", i));
+            productRequest.setId("b" + String.format("%04d", i));
             productRequest.setProductName(inputData[index]);
             productRequest.setPrice(1200);
             productRequest.setQuantity(3);
@@ -52,7 +52,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("RedisTemplate를 사용하여 상품등록")
     public void productSaveV2_test() {
-        int LOOP_COUNT = 10000;
+        int LOOP_COUNT = 30000;
         String url = "http://localhost:8080/v2/orders/addProduct";
         Random random = new Random();
 
@@ -145,7 +145,7 @@ class ProductServiceTest {
         // 10건 검색에 1초 43
         // 100 검색에 11초 39
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             findProductbyNameV2_test();
         }
     }

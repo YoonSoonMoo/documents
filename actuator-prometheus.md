@@ -1,36 +1,37 @@
 # actuator - prometheus
 ![](https://img.shields.io/badge/spring%20boot-3.1.4.RELEASE-brightgreen) ![](https://img.shields.io/badge/Gradle-8.3-red)  ![](https://img.shields.io/badge/actuator-3.1.4-blue) ![](https://img.shields.io/badge/redis-5.0.14-orange)  
-powered by [Java]  platform development team present ⓒ2023 DAOU Tech., INC. All rights reserved.
+powered by [Java]  platform development YSM present ⓒ2023 DAOU Tech., INC. All rights reserved.
 
-### actuator 도입 이유
+### Actuator 도입 이유
 
 `전투에서 실패한 지휘관은 용서할 수 있지만 경계에서 실패하는 지휘관은 용서할 수 없다`  라는 말이 있다.  
-이 말을 서비스를 운영하는 개발자에게 맞추어 보면 장애는 언제든지 발생할 수 있다.  
-하지만 모니터링(경계)은 잘 대응하는 것이 중요하다는 의미이다.
-장애가 발생했을 경우 가장 중요시 여기는 것이 무엇인가?  
-사업팀 입장이라면 매출에 대한 영향이고 개발팀 입장에서는 얼마나 빠르게 인지하고 대응했느냐 일 것이다.
+이 말을 개발적인 관점에서 해석한다면  문제(장애)를 사전에 발견하고 대응하는 것에 대한 중요성을 강조한 내용이라 생각한다.
 
-개발팀의 입장에서 고려해 본다면  우리가 지켜봐야 하는 내용에는 어떤 것들이 있을까?  
-개인적으로는 지표(metric) , 추적(trace) 라고 생각한다.  
-이 부분에 대해서는 신규 서비스를 개발할 때 크게 비중을 두고 계획을 한다.  
-서비스 오픈 이후에도 개선 작업을 지속하는 이유이다.  
+그러면 우리가 모니터링(경계)해야 하는 내용에는 어떤 것들이 있을까?  
+개인적으로는 지표(metric) , 추적(trace) 라고 생각한다.
 
-`actuator`는 이전부터 어느 정도 인지하고 있는 기술이었으나 실제 운영 환경에 적용하는 것을 고려하지 않았다.  
-그 이유는 서비스 적용할 경우 보안상의 리스크와 ( 실제 actuator에는 서비스를 원격으로 내리는 기능도 있음 )  
-지표 , 추적 기능을 `스카우터`가 대체 할 수 있었기 때문이었다.  
-하지만 스카우터에서 지원되지 않는 기능이 있었으니 그것은 바로 비지니스 매트릭이다.  
-비즈니스 매트릭이란 이전 우리가 개발/운영 했던 배달대행 서비스에서 예를 들면 활성화 된 지점의 액티브 라이더의 수  
-온라인 매장 수를 예로 들수 있겠다.  
-시스템 매트릭 (CPU , 메모리) , 애플리케이션 매트릭( 톰켓 쓰레드풀 , 커넥션풀 수 등 ) 에서 문제가   
-확인되지 않으나 특정 지점의 라이더와 온라인 매장이 0 이라면 무언가 문제가 있는것 아닐까?  
-이런 비지니스 매트릭을 확인하기 위해 나는 프로메테우스와 그라파나를 활용했다.  
-비즈니스 매트릭의 장점으로는 개발자 뿐만이 아닌 사업팀에서도 유의미한 정보가 된다는 것이다.
+지표 또는 추적을 위한 기술로 `actuator`를 설명 하고자 한다.  
+`actuator`는 지표와 추적에 적합한 기술이나 실제 운영 환경에 적용하는 것을 고려하지 않았다.  
+그 이유는 서비스에 적용할 경우 보안상의 리스크와 ( 실제 actuator에는 서비스를 원격으로 내리는 기능도 있음 )  
+지표 , 추적 기능을 별도의 APM( `스카우터`)이 대체 할 수 있었기 때문 이었다.    
+하지만 스카우터에서 지원되지 않는 기능이 있었으니 그것은 바로 비지니스 메트릭이다.  
+비즈니스 메트릭이란 프로세스의 최종 결과를 시간의 흐름에 따라 표시한 값을 의미한다.   
+이전 우리가 개발/운영 했던 배달대행 서비스에서 예를 들어보자.  
+활성화 된 특정 지점 주문수 또는 활동중인 라이더 수 등이 있겠다.  
+시스템 메트릭 (CPU , 메모리) , 애플리케이션 메트릭( 톰켓 쓰레드 , DB 커넥션 풀 수 ) 에서 문제가   
+확인되지 않으나 특정 지점의 매출이 0원 또는 매출이 있으나 활동하고 있는 라이더 수가 0명이라면 뭔가 문제가 있는것 아닐까?    
+이런 문제를 인지하기 위해 배달대행 서비스에서는 로그 기반으로 메트릭을 생성하고 해당 데이타를 프로메테우스에 저장  
+시각화는 그라파나를 활용했다.  
+![](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCegUhXOBrKeAHPqHDtnlYTmYOydfvpWjMrP8ywZOmmFJFWR4AvataWudWy6z-0A2cyBsl6TjiFkRgxtqMwdOUhgftkqQ=w1594-h1019)
+
+추가적으로 비즈니스 메트릭의 내용에 따라 개발팀 뿐만이 아닌 사업팀에서도 유의미한 정보가 될수도 있다.
+이러한 비즈니스 메트릭을 만들기 위한 가장 효율적인 기술이 `actuator` 라고 생각했다.
 
 ### 무엇을 검증 해볼까?
 
 `actuator` 를 이용한 비즈네스 메트릭 검증을 검토해 보자
 상품을 등록,수정,검색하는 API 대상으로 호출된 카운트 (상품 등록수 , 검색 검수 등)를   
-비즈니스 매트릭으로 정의하고 그 결과를 확인해 보자.  
+비즈니스 메트릭으로 정의하고 그 결과를 확인해 보자.  
 추가적으로 Redis 사용에 있어 DataRedis 그리고 RedisTemplate 사용에 대한 성능 검증 (프로메테우스 사용)도 병행해 보자.
 
 - gradle 구성 및 필요 라이브러리 소개
@@ -38,13 +39,14 @@ powered by [Java]  platform development team present ⓒ2023 DAOU Tech., INC. Al
 - `actuator`의 설정
 - 어플리케이션 관련 메트릭에 대한 소개
 - 프로메테우스 설치 및 설명
-- DataRedis 사용 검증
-- RedisTemplate 사용 검증
-- 
+- AOP를 통한 마이크로미터 설정 설명
+- actuator - prometheus 연동을 통한 성능 비교  
+  ㄴ DataRedis 사용 BL 작성 (V1) : Redis 발생 커멘트 확인  
+  ㄴ RedisTemplate 사용 BL 작성 (V2) : Redis 발생 커멘트 확인
 
 ### 프로젝트 구성
 
-필요한 라이브러리는 아래와 같습니다.  
+필요한 라이브러리는 아래와 같다.  
 `build.gradle`
 ```css
 plugins {
@@ -141,7 +143,7 @@ server:
 ```
 
 #### 마이크로미터 프로메테우스 구현체 실현
-프로메테우스를 실행하고 구현되어 기존 프로젝트에 프로메테우스용 매트릭 구현체를 추가한다.  
+프로메테우스를 실행하고 구현되어 기존 프로젝트에 프로메테우스용 메트릭 구현체를 추가한다.  
 아래의 내용을 `gradle` 에 추가한다.
 ```yaml
 implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -161,10 +163,51 @@ implementation 'io.micrometer:micrometer-registry-prometheus'
 > http://localhost:9090/config  
 > http://localhost:9090/targets
 
+비지니스 용도의 metrics를 class method 단위로 등록해서 사용한다.  
+AOP 방식을 지원하므로 간단하게 등록해서 사용해 보자
+metrics를 관리자에 Counted (카운트용 Aspect) 를 아래와 같이 등록한다.
+```java
+    @Bean
+    public CountedAspect countedAspect(MeterRegistry meterRegistry) {
+        return new CountedAspect(meterRegistry);
+    }
+```
 
-레디스 (DataRedis CrudRepository 사용시) Redis의 동작
+적용 대상 class에 `counted` 를 적용해 보자
+```java
+    @Counted("my.redisTemp.product")
+    public CommonResponse<String> addProductProcess(ProductRequest productRequest) {
+        CommonResponse commonResponse = new CommonResponse();
+        Product product = Product.builder()
+                .id(productRequest.getId())
+                .productName(productRequest.getProductName())
+                .price(productRequest.getPrice())
+                .quantity(productRequest.getQuantity()).build();
+        productRepository.save(product);
+
+        commonResponse.setResult("200");
+        commonResponse.setData(product.getProductName());
+        return commonResponse;
+    }
+```
+my.redisTemp.product -> my_redisTemp_product_total 의 키가 생성되며 위의 method를 호출할 경우  
+아래와 같은 metric을 확인할 수 있다. (count metric)
+```javascript
+# HELP my_redisTemp_product_total  
+# TYPE my_redisTemp_product_total counter
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="addProductProcess",result="success",} 1.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductByProductName",result="success",} 2.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="updateProductProcess",result="success",} 1.0
+my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductById",result="success",} 7.0
+```
+![](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaDApdqcSFovFWaDLtWvKGb_YFu2YnHCtOqxCkd7zxS7QH4M9lp4W5vVc2UovLXU4fEmww57ClRgou9UasPvSPclggPfsw=w1594-h1019)
+
+### actuator - prometheus 연동을 통한 성능 비교
+시스템 및 어플리케이션 메트릭이 적용되었으니 Redis 데이타 핸들링 방식 2가지를 서로 비교하도록 해 보겠다.  
+
+Redis (DataRedis CrudRepository 사용시) Redis의 동작
 DataRedis의 구현체는 매우 간단하다.
-상품명을 찾는 method만 추가 했으며 JPA 와 동일하게 검색조건을 정의한다. 
+상품명을 찾는 method만 추가 했으며 JPA 와 동일하게 검색조건을 정의한다.
 
 ```java
 @Repository
@@ -236,7 +279,7 @@ OK
 
 ```
 
-레디스 (RedisTemplate 사용시) 
+Redis (RedisTemplate 사용시)
 
 DataRedis와 달리 redisTemplate 를 사용할 경우 모든 내용을 구현해 줘야 한다.  
 주요한 내용으로는 상품명을 검색조건으로 지정하기 때문에 smember(index) 를 사용하며  
@@ -257,7 +300,7 @@ key : 상품명 , 상품코드 : value로 값을 저장한다.
 
 ```
 
-아래는 smember를 기준으로 상품값을 가져오는 케이스 
+아래는 smember를 기준으로 상품값을 가져오는 케이스
 ```java
         // smember 에서 인덱싱된 상품명을 검색한다.
         Set<String> resultList = redisIndexTemplate.opsForSet().members("PRODUCT_NAME:" + productName);
@@ -299,40 +342,71 @@ key : 상품명 , 상품코드 : value로 값을 저장한다.
 1699434817.293564 [0 127.0.0.1:63249] "GET" "b00001"
 ```
 
-비지니스 용도의 metrics를 class method 단위로 등록해서 사용한다.  
-AOP 방식을 지원하므로 간단하게 등록해서 사용해 보자
-metrics를 관리자에 Counted (카운트용 Aspect) 를 아래와 같이 등록한다.
+Redis의 2가지 구현 방법을 아래와 같은 테스트 케이스를 만들어 비교해 보았다.
 ```java
-    @Bean
-    public CountedAspect countedAspect(MeterRegistry meterRegistry) {
-        return new CountedAspect(meterRegistry);
-    }
-```
+    String[] inputData = {"순무양말", "순무덧신", "순무신발", "순무마스카라", "순무립스틱", "순무잠바", "순무스카프"};
+    RestTemplate restTemplate = new RestTemplate();
 
-적용 대상 class에 `counted` 를 적용해 보자
-```java
-    @Counted("my.redisTemp.product")
-    public CommonResponse<String> addProductProcess(ProductRequest productRequest) {
-        CommonResponse commonResponse = new CommonResponse();
-        Product product = Product.builder()
-                .id(productRequest.getId())
-                .productName(productRequest.getProductName())
-                .price(productRequest.getPrice())
-                .quantity(productRequest.getQuantity()).build();
-        productRepository.save(product);
+    @Test
+    @DisplayName("RedisDataJPA를 사용하여 상품등록")
+    public void productSaveV1_test() {
+        // 10000등록 2분36초 소요
+        int LOOP_COUNT = 10000;
+        String url = "http://localhost:8080/v1/orders/addProduct";
+        Random random = new Random();
 
-        commonResponse.setResult("200");
-        commonResponse.setData(product.getProductName());
-        return commonResponse;
+        // 100개의 데이터 생성
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            // 랜덤으로 한 개의 데이터 선택
+            int index = random.nextInt(inputData.length);
+
+            ProductRequest productRequest = new ProductRequest();
+            productRequest.setId("a" + String.format("%04d", i));
+            productRequest.setProductName(inputData[index]);
+            productRequest.setPrice(1200);
+            productRequest.setQuantity(3);
+            HttpEntity<ProductRequest> httpEntity = new HttpEntity<>(productRequest);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class
+            );
+            // 만들어진 데이타 표시
+            System.out.println(response);
+        }
     }
+
 ```
-my.redisTemp.product -> my_redisTemp_product_total 의 키가 생성되며 위의 method를 호출할 경우  
-아래와 같은 metric을 확인할 수 있다. (count metric)
-```javascript
-# HELP my_redisTemp_product_total  
-# TYPE my_redisTemp_product_total counter
-my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="addProductProcess",result="success",} 1.0
-my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductByProductName",result="success",} 2.0
-my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="updateProductProcess",result="success",} 1.0
-my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTempService",exception="none",method="findProductById",result="success",} 7.0
-```
+테트스 케이스 수행 시간
+
+- 데이타의 등록
+
+| 수량        | DataRedis (V1) | RedisTemplate(V2) | 
+|-----------|----------------|-------------------|
+| 수행시간 | 2분 36초       | 2분 38초          |
+
+- 등록된 1만건의 데이타 기준 검색 시간
+
+| Request수 | DataRedis (V1) | RedisTemplate(V2) |
+|-----------|----------------|-------------------|
+| 100       | 1031ms         | 1029ms            |
+| 1000      | 11670ms        | 11390ms           |
+| 10000     | 122000ms       | 124000ms          |
+
+결과는 테스트 케이스 실행 시간 및 `actuator` - `prometheus` 마이크로 미터로 확인 이 가능하다.  
+![](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaAGhon3VHHKlHxENclI9EKcoGRX0b80LWINX6RebSFqJat9nhdtDJKdNsSOeQmXGxysJIXxph5u0FAWEJfvrViA6pIXKg=w2149-h1019)
+
+비지니스 메트릭은 성능 테스트와는 상관 없음  
+서비스에 추가한 `@Counted` 애노테이션 영향으로 호출된 수 만큼 우상향 그래프가 그려졌다.  
+![](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCBUuh1Pn_ebVuFZ3o9iIxFkzehBcK0M5UX3Lvu1lu3e9vva3wGJ5-uI4bXIE0nGa8FJy149UP4otCQTmvdH1HLBVDiwQ=w1709-h1019)
+
+지금에 와서 생각해 보니 `@Counted` 메트릭 대신 `@Timed` 메트릭을 적용했다면 V1,V2의 성능 검증을 prometheus에서 조금 더
+수월하게 진행할 수 있었을 듯 하다.  
+cpu 사용률과 jvm의 상태등을 확인해 보았으나 만건의 데이타로는 수치가 미미하여 더 확대해서 테스트를 진행해 보아야 할듯 하다.
+  
+결론적으로 `DataRedis`와 `RedisTemplate` 의 사용에 있어 큰 차이가 없었다.  
+DataRedis에서 발행되는 Redis 명령어를 보면 일반적으로 RedisTemplate에서 구현하는 것보다는 범용화된  
+(최적화된?) 명령어를 사용하는 듯 하다.  
+다만 DataRedis를 사용할 경우 본인의 의지와 상관없는 더미성 데이타가 쌓이는 것은 감안 해야 한다.  
+하지만 smembers(index)를 사용하는 경우 개발자가 실수할 수 있는 부분을 커버해 주는 부분은 마음에 든다.  
