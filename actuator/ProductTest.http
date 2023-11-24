@@ -93,7 +93,7 @@ Content-Type: application/json
 GET http://localhost:8080/v2/orders/products/b00001
 
 ###[actuator Redis template test] 손 장갑을 이름으로 검색한다.
-GET http://localhost:8080/v2/orders/products/name/순무장갑
+GET http://localhost:8080/v2/orders/products/name/순무양말
 
 ###[actuator Redis template test] 상품명의 like 검색을 실시한다.
-GET http://localhost:8080/v2/orders/products/name/like/양말
+GET http://localhost:8080/v2/orders/products/name/like/신발

@@ -29,7 +29,7 @@ powered by [Java]  platform development YSM present ⓒ2023 DAOU Tech., INC. All
 
 ### 무엇을 검증 해볼까?
 
-`actuator` 를 이용한 비즈네스 메트릭 검증을 검토해 보자
+`actuator` 를 이용한 비즈니스 메트릭 검증을 검토해 보자
 상품을 등록,수정,검색하는 API 대상으로 호출된 카운트 (상품 등록수 , 검색 검수 등)를   
 비즈니스 메트릭으로 정의하고 그 결과를 확인해 보자.  
 추가적으로 Redis 사용에 있어 DataRedis 그리고 RedisTemplate 사용에 대한 성능 검증 (프로메테우스 사용)도 병행해 보자.
@@ -203,7 +203,7 @@ my_redisTemp_product_total{class="kr.pe.yoonsm.actuator.service.ProductRedisTemp
 ![](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaDApdqcSFovFWaDLtWvKGb_YFu2YnHCtOqxCkd7zxS7QH4M9lp4W5vVc2UovLXU4fEmww57ClRgou9UasPvSPclggPfsw=w1594-h1019)
 
 ### actuator - prometheus 연동을 통한 성능 비교
-시스템 및 어플리케이션 메트릭이 적용되었으니 Redis 데이타 핸들링 방식 2가지를 서로 비교하도록 해 보겠다.  
+시스템 및 어플리케이션 메트릭이 적용되었으니 Redis 데이타 핸들링 방식 2가지를 서로 비교 하도록 해 보겠다.  
 
 Redis (DataRedis CrudRepository 사용시) Redis의 동작
 DataRedis의 구현체는 매우 간단하다.
@@ -408,5 +408,33 @@ cpu 사용률과 jvm의 상태등을 확인해 보았으나 만건의 데이타�
 결론적으로 `DataRedis`와 `RedisTemplate` 의 사용에 있어 큰 차이가 없었다.  
 DataRedis에서 발행되는 Redis 명령어를 보면 일반적으로 RedisTemplate에서 구현하는 것보다는 범용화된  
 (최적화된?) 명령어를 사용하는 듯 하다.  
-다만 DataRedis를 사용할 경우 본인의 의지와 상관없는 더미성 데이타가 쌓이는 것은 감안 해야 한다.  
-하지만 smembers(index)를 사용하는 경우 개발자가 실수할 수 있는 부분을 커버해 주는 부분은 마음에 든다.  
+DataRedis를 사용할 경우 본인의 의지와 상관없는 불필요한 데이타가 쌓이며 일반적인 JPA 키워드 사용에 제한이 있다.  
+Redis는 RDB가 아니기에 당연한 내용이지만 코딩시 실수의 여지가 있다.  
+아래는 DataRedis에서 사용할 수 없는 타입을 정의한 것이다. ( 대다수 사용불가 )  
+```java
+	public static enum Type {
+		BETWEEN(2, "IsBetween", "Between"), IS_NOT_NULL(0, "IsNotNull", "NotNull"), 
+                IS_NULL(0, "IsNull", "Null"), LESS_THAN("IsLessThan", "LessThan"), 
+                LESS_THAN_EQUAL("IsLessThanEqual", "LessThanEqual"), 
+                GREATER_THAN("IsGreaterThan","GreaterThan"), 
+                GREATER_THAN_EQUAL("IsGreaterThanEqual", "GreaterThanEqual"), 
+                BEFORE("IsBefore","Before"), AFTER("IsAfter", "After"), NOT_LIKE("IsNotLike", "NotLike"), 
+                LIKE("IsLike","Like"), STARTING_WITH("IsStartingWith", "StartingWith", "StartsWith"), 
+                ENDING_WITH("IsEndingWith", "EndingWith", "EndsWith"), 
+                IS_NOT_EMPTY(0, "IsNotEmpty", "NotEmpty"), 
+                IS_EMPTY(0, "IsEmpty","Empty"), 
+                NOT_CONTAINING("IsNotContaining", "NotContaining", "NotContains"), 
+                CONTAINING("IsContaining", "Containing", "Contains"), NOT_IN("IsNotIn", "NotIn"), 
+                IN("IsIn","In"), NEAR("IsNear", "Near"), WITHIN("IsWithin", "Within"), 
+                REGEX("MatchesRegex","Matches", "Regex"), EXISTS(0, "Exists"), TRUE(0, "IsTrue", "True"), 
+                FALSE(0,"IsFalse", "False"), 
+                NEGATING_SIMPLE_PROPERTY("IsNot","Not"), SIMPLE_PROPERTY("Is", "Equals");
+```
+다만  smembers(index)를 사용하는 경우 개발자가 실수할 수 있는 부분을 커버해 주는 부분은 마음에 든다.
+그래서 나는 사용에 제한이 있는 DataRedis보다는 개발에 유연함이 있는 redisTemplate를 사용할 것 같다.  
+이 부분은 개인취향 일수도 있겠지만 ...
+
+#### 마치며
+비즈니스 메트릭 구성에 있어 actuator 활용은 꽤 메리트가 있다고 생각한다.  
+prometheus에 쌓여있는 데이타를 어떻게 추출하며 (PromQL) 이를 그라파나등에 어떻게 시각화 시키느냐는 또 하나의 과제 이다.  
+actuator 를 활용 한다면 부하 검증 등에도 상당히 도움이 될수 있다는 부분을 Redis 검증을 통해 알아보았다.  

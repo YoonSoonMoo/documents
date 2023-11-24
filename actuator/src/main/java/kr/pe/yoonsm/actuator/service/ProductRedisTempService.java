@@ -2,6 +2,7 @@ package kr.pe.yoonsm.actuator.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import kr.pe.yoonsm.actuator.controller.vo.CommonResponse;
 import kr.pe.yoonsm.actuator.controller.vo.ProductRequest;
 import kr.pe.yoonsm.actuator.repository.entity.Product;
@@ -107,7 +108,8 @@ public class ProductRedisTempService {
         return commonResponse;
     }
 
-    @Counted("my.redisTemp.product")
+    //@Counted("my.redisTemp.product")
+    @Timed("my.redisTemp.timed")
     public CommonResponse<List<Product>> findProductByProductName(String productName) {
         CommonResponse commonResponse = new CommonResponse();
         List<Product> returnList = new ArrayList<>();
@@ -131,6 +133,7 @@ public class ProductRedisTempService {
     }
 
 
+    @Timed("my.redisTemp.timed")
     public CommonResponse<List<Product>> findProductByProductNameLike(String productName) {
 
         CommonResponse commonResponse = new CommonResponse();
